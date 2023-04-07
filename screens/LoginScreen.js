@@ -1,7 +1,7 @@
 import { Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 
 const LoginScreen = () => {
@@ -62,7 +62,11 @@ const LoginScreen = () => {
         />
       </View>
 
-      <View>
+      <View style={styles.textView}>
+        <TouchableOpacity style={styles.text} onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text>Mot de passe oublié ?</Text>
+        </TouchableOpacity>
+        
         <TouchableOpacity style={styles.text} onPress={() => navigation.navigate('Register')}>
           <Text>Pas encore de compte ? Inscris-toi ici.</Text>
         </TouchableOpacity>
@@ -149,8 +153,13 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
 
+  textView:{
+    paddingVertical: 15,
+  },
+
   text:{
-    paddingVertical: 15
-  }
+    paddingVertical: 5,
+    textAlign: 'center'
+  },
 
 })
