@@ -8,12 +8,13 @@ const RegisterScreen = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
 
   const navigation = useNavigation();
 
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
+  const handleSignUp = async () => {
+    await createUserWithEmailAndPassword(auth, email, password)
     .then(userCredentials => {
       const user = userCredentials.user;
       console.log('registered with:',user.email);
@@ -27,6 +28,13 @@ const RegisterScreen = () => {
       behavior="padding">
 
       <View style={styles.inputContainer}>
+        <TextInput
+          placeholder='Pseudo'
+          value={name}
+          onChangeText={text => setName(text)}
+          style={styles.input}
+        />
+
         <TextInput
           placeholder='Identifiant'
           value={email}

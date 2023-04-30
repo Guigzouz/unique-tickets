@@ -3,55 +3,88 @@ import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
+import * as SecureStore from 'expo-secure-store';
+
+
 
 const LoginScreen = () => {
 
+  const [token, setToken] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
+  const [error, setError] = useState('')
   const navigation = useNavigation();
+
+  async function getToken(){
+    try {
+      const user = auth.currentUser;
+        if (user) {
+          const idTokenResult = await user.getIdTokenResult();
+          setToken(idTokenResult.token);
+          console.log('token set')
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function saveToken(jwt, token) {
+      await SecureStore.setItemAsync(jwt, token);
+    }
+
+    async function getValueFor(key) {
+      let result = await SecureStore.getItemAsync(key);
+      if (result) {
+        console.log("🔐 Here's your value in LoginScreen 🔐 \n" + result);
+      } else {
+        console.log('No values stored under that key.');
+      }
+    }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user){
-        navigation.navigate("Home")
+        console.log('here')
       }
     }) 
+
 
     // unsubscribe va stopper le listner firebase lorsque l'utilisateur sort de la page login
     return unsubscribe
   }, [])
 
-  // const handleSignUp = () => {
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //   .then(userCredentials => {
-  //     const user = userCredentials.user;
-  //     console.log('registered with:',user.email);
-  //   })
-  //   .catch(error => alert(error.message))
-  // }
+  const handleLogin = async () => { 
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-    .then(userCredentials => {
+
+    await signInWithEmailAndPassword(auth, email, password)
+    .then(async userCredentials => {
       const user = userCredentials.user;
-      console.log('logged in with:', user.email);
+      await getToken()
+      console.log('firebase : logged in')
     })
-    .catch(error => alert(error.message))
+    .catch(error => setError(error.message))
+    
+    await saveToken('jwt', token);
+    await getValueFor('jwt');
+
   }
 
+
+
+  
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior="padding">
 
       <View style={styles.inputContainer}>
+        {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
         <TextInput
           placeholder='Identifiant'
           value={email}
           onChangeText={text => setEmail(text)}
           style={styles.input}
-        />
+          />
 
         <TextInput
           placeholder='Mot de passe'
@@ -82,12 +115,7 @@ const LoginScreen = () => {
           <Text style={styles.buttonText}>Connexion</Text>
         </TouchableOpacity>
 
-        {/* <TouchableOpacity
-        onPress={handleSignUp}
-        style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>S'enregistrer</Text>
-        </TouchableOpacity> */}
+
 
       </View>
     </KeyboardAvoidingView>

@@ -1,22 +1,38 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { auth } from '../firebase'
 import { signOut } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
+import * as SecureStore from 'expo-secure-store';
+
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const user = auth.currentUser;
 
 
-  const handleSignOut = () => {
-    signOut(auth)
-    .then(() => {
-      navigation.replace("Login")
-    })
-    .catch(error => alert(error.message))
+  const deleteSecureItem = async (key) => {
+    try {
+      await SecureStore.deleteItemAsync(key);
+      console.log(`Successfully deleted key: ${key}`);
+    } catch (error) {
+      console.log(`Error deleting key: ${key}. Error: ${error}`);
+    }
   }
+
+  
+    const handleSignOut = () => {
+      signOut(auth)
+      .then(() => {
+        deleteSecureItem('jwt');
+      })
+      .catch(error => alert(error.message))
+    }
+    
+    
+  
   return (
+
     <View style={styles.container}>
 
       {/* le point d'intérogation de currentUser indique que cette variable peut être undefined et evite un crash de l'app */}
