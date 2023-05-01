@@ -3,12 +3,17 @@ import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
+import { globalStyles } from '../styles/global'
+import { Colors } from '../styles/colors'
 import * as SecureStore from 'expo-secure-store';
 
 
 
-const LoginScreen = () => {
 
+const LoginScreen = () => {
+  
+
+  
   const [token, setToken] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -61,9 +66,8 @@ const LoginScreen = () => {
       const user = userCredentials.user;
       await getToken()
       console.log('firebase : logged in')
-    })
-    .catch(error => setError(error.message))
-    
+    }).catch(error => setError(error.message))
+
     await saveToken('jwt', token);
     await getValueFor('jwt');
 
@@ -74,120 +78,58 @@ const LoginScreen = () => {
   
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={globalStyles.container}
       behavior="padding">
 
-      <View style={styles.inputContainer}>
+      <View style={globalStyles.textView}>
+        <Text style={globalStyles.title}>Déjà de retour ? ;)</Text>
+      </View>
+
+      <View style={globalStyles.inputContainer}>
         {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
         <TextInput
-          placeholder='Identifiant'
+          placeholder='romain.dupuis@hotmail.fr'
+          placeholderTextColor={Colors.dimmedLight}
           value={email}
           onChangeText={text => setEmail(text)}
-          style={styles.input}
+          style={globalStyles.input}
           />
 
         <TextInput
-          placeholder='Mot de passe'
+          placeholder='******'
+          placeholderTextColor={Colors.dimmedLight}
           value={password}
           onChangeText={text => setPassword(text)}
-          style={styles.input}
+          style={globalStyles.input}
           secureTextEntry
         />
       </View>
 
-      <View style={styles.textView}>
-        <TouchableOpacity style={styles.text} onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text>Mot de passe oublié ?</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.text} onPress={() => navigation.navigate('Register')}>
-          <Text>Pas encore de compte ? Inscris-toi ici.</Text>
-        </TouchableOpacity>
-      </View>
 
       <View
-        style={styles.buttonContainer}>
+        style={globalStyles.buttonContainer}>
 
         <TouchableOpacity
         onPress={handleLogin}
-        style={styles.button}
+        style={globalStyles.button}
         >
-          <Text style={styles.buttonText}>Connexion</Text>
+          <Text style={globalStyles.buttonText}>Connexion</Text>
         </TouchableOpacity>
 
 
 
+      </View>
+      <View style={globalStyles.textView}>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={globalStyles.textUnderline}>Mot de passe oublié ?</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={globalStyles.textUnderline}>Pas encore de compte ? Inscris-toi ici.</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   )
 }
 
 export default LoginScreen
-
-const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  inputContainer:{
-    width: '80%'
-  },
-
-  input:{
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginTop: 5
-
-  },
-
-  buttonContainer:{
-    width: '60%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40
-
-  },
-
-  button:{
-    backgroundColor: '#da4116',
-    width: '100%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center'
-   
-  },
-
-  buttonText:{
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16
-  },
-
-  buttonOutline:{
-    backgroundColor: 'white',
-    marginTop: 5,
-    borderColor: '#da4116',
-    borderWidth: 2
-
-  },
-
-  buttonOutlineText:{
-    color: '#da4116',
-    fontWeight: '700',
-    fontSize: 16
-  },
-
-  textView:{
-    paddingVertical: 15,
-  },
-
-  text:{
-    paddingVertical: 5,
-    textAlign: 'center'
-  },
-
-})

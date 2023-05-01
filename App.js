@@ -9,6 +9,8 @@ import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import * as SecureStore from 'expo-secure-store';
 import connectionStore from './store/ConnectionStore';
 import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -24,9 +26,24 @@ async function getValueFor(key) {
   }
 }
 
+
+
+
 export default function App() {
+
+
+  // Expo font hook, s'assure de charger les polices
+  const [fontsLoaded] = useFonts({
+    'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
+    'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+    'Montserrat-Italic': require('./assets/fonts/Montserrat-Italic.ttf'),
+  });
+
+  // déclare les etats de connexion pour le store zustand
   const { connected, setConnected, setDisconnected } = connectionStore();
   
+
+  // change l'état en fonction de la presence ou non d'un jwt
   useEffect(() => {
     getValueFor('jwt').then((jwt) => {
       if (jwt && !connected) {
@@ -39,6 +56,10 @@ export default function App() {
     })
   }, [connected])
 
+// s'assure que les polices sont bien chargées
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
