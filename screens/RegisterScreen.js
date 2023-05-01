@@ -1,8 +1,10 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
+import { globalStyles } from '../styles/global'
+import { Colors } from '../styles/colors'
 
 const RegisterScreen = () => {
 
@@ -24,41 +26,51 @@ const RegisterScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={globalStyles.container}
       behavior="padding">
 
-      <View style={styles.inputContainer}>
+      <Image style={globalStyles.logo} source= {require('../assets/logo/logo.png')}></Image>
+
+
+      <View style={globalStyles.textView}>
+        <Text style={globalStyles.title}>Créer son compte</Text>
+      </View>
+
+      <View style={globalStyles.inputContainer}>
         <TextInput
           placeholder='Pseudo'
+          placeholderTextColor={Colors.dimmedLight}
           value={name}
           onChangeText={text => setName(text)}
-          style={styles.input}
+          style={globalStyles.input}
         />
 
         <TextInput
-          placeholder='Identifiant'
+          placeholder='romain.dupuis@hotmail.fr'
+          placeholderTextColor={Colors.dimmedLight}
           value={email}
           onChangeText={text => setEmail(text)}
-          style={styles.input}
+          style={globalStyles.input}
         />
 
         <TextInput
-          placeholder='Mot de passe'
+          placeholder='******'
+          placeholderTextColor={Colors.dimmedLight}
           value={password}
           onChangeText={text => setPassword(text)}
-          style={styles.input}
+          style={globalStyles.input}
           secureTextEntry
         />
       </View>
 
       <View
-        style={styles.buttonContainer}>
+        style={globalStyles.buttonContainer}>
 
         <TouchableOpacity
         onPress={handleSignUp}
-        style={[styles.button, styles.buttonOutline]}
+        style={globalStyles.button}
         >
-          <Text style={styles.buttonOutlineText}>S'enregistrer</Text>
+          <Text style={globalStyles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
 
       </View>

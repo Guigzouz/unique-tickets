@@ -1,4 +1,4 @@
-import { Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
@@ -13,29 +13,38 @@ import * as SecureStore from 'expo-secure-store';
 const LoginScreen = () => {
   
 
-  
   const [token, setToken] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigation = useNavigation();
 
+  // async function getToken(){
+  //   try {
+  //     const user = auth.currentUser;
+  //       if (user) {
+  //         const idTokenResult = await user.getIdTokenResult();
+  //         setToken(idTokenResult.token);
+  //         console.log('token set')
+          
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+
   async function getToken(){
     try {
       const user = auth.currentUser;
         if (user) {
           const idTokenResult = await user.getIdTokenResult();
-          setToken(idTokenResult.token);
-          console.log('token set')
+          return idTokenResult?.token
         }
       } catch (error) {
         console.log(error);
       }
     }
 
-    async function saveToken(jwt, token) {
-      await SecureStore.setItemAsync(jwt, token);
-    }
 
     async function getValueFor(key) {
       let result = await SecureStore.getItemAsync(key);
@@ -46,33 +55,40 @@ const LoginScreen = () => {
       }
     }
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      if (user){
-        console.log('here')
-      }
-    }) 
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, user => {
+  //     if (user){
+  //       console.log('here')
+  //     }
+  //   }) 
+    
+    
+  //   // unsubscribe va stopper le listner firebase lorsque l'utilisateur sort de la page login
+  //   return unsubscribe
+  // }, [])
 
+    // await signInWithEmailAndPassword(auth, email, password)
+    // .then(async userCredentials => {
+    //   const user = userCredentials.user;
+    //   console.log('firebase logged in :', user.email)
+    // }).catch(error => setError(error.message))
+    
+    // getToken()
 
-    // unsubscribe va stopper le listner firebase lorsque l'utilisateur sort de la page login
-    return unsubscribe
-  }, [])
 
   const handleLogin = async () => { 
-
-
+    try {
     await signInWithEmailAndPassword(auth, email, password)
-    .then(async userCredentials => {
-      const user = userCredentials.user;
-      await getToken()
-      console.log('firebase : logged in')
-    }).catch(error => setError(error.message))
+ 
+     const userToken = await getToken();
+     await SecureStore.setItemAsync('jwt', JSON.stringify(userToken));
+     setToken(userToken);
+    } catch (err) {
+     console.log(err.message)
+    }
 
-    await saveToken('jwt', token);
-    await getValueFor('jwt');
-
-  }
-
+    getValueFor('jwt')
+}
 
 
   
@@ -80,13 +96,16 @@ const LoginScreen = () => {
     <KeyboardAvoidingView
       style={globalStyles.container}
       behavior="padding">
+      
+      <Image style={globalStyles.logo} source= {require('../assets/logo/logo.png')}></Image>
+
 
       <View style={globalStyles.textView}>
         <Text style={globalStyles.title}>Déjà de retour ? ;)</Text>
       </View>
 
       <View style={globalStyles.inputContainer}>
-        {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+        {error ? <Text style={{ color: Colors.dimmedLight, textAlign: 'center' }}>{error}</Text> : null}
         <TextInput
           placeholder='romain.dupuis@hotmail.fr'
           placeholderTextColor={Colors.dimmedLight}

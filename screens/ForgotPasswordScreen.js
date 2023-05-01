@@ -1,10 +1,13 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { globalStyles } from '../styles/global';
+import { Colors } from '../styles/colors'
+
 
 const ForgotPasswordScreen = () => {
 
@@ -24,26 +27,37 @@ const ForgotPasswordScreen = () => {
   
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={globalStyles.container}
       behavior="padding">
 
-      <View style={styles.inputContainer}>
+      <Image style={globalStyles.logo} source= {require('../assets/logo/logo.png')}></Image>
+
+
+      <View style={globalStyles.textView}>
+        <Text style={globalStyles.title}>Mot de passe oublié</Text>
+        <Text style={globalStyles.text}>Aucuns soucis, nous allons vous envoyer un mail</Text>
+      </View>
+
+
+
+      <View style={globalStyles.inputContainer}>
         <TextInput
-          placeholder='Identifiant'
+          placeholder='romain.dupuis@hotmail.fr'
+          placeholderTextColor={Colors.dimmedLight}
           value={email}
           onChangeText={text => setEmail(text)}
-          style={styles.input}
+          style={globalStyles.input}
         />
       </View>
 
       <View
-        style={styles.buttonContainer}>
+        style={globalStyles.buttonContainer}>
 
         <TouchableOpacity
         onPress={() => {handlePasswordReset(email)}}
-        style={[styles.button, styles.buttonOutline]}
+        style={globalStyles.button}
         >
-          <Text style={styles.buttonOutlineText}>Envoyer mail</Text>
+          <Text style={globalStyles.buttonText}>Envoyer le mail</Text>
         </TouchableOpacity>
 
       </View>

@@ -20,9 +20,9 @@ export const globalStyles = StyleSheet.create({
     input:{
       backgroundColor: Colors.primaryDark,
       paddingHorizontal: 15,
-      paddingVertical: 16,
+      paddingVertical: 15,
       borderRadius: 15,
-      marginTop: 5,
+      marginTop: 25,
       borderColor: Colors.primaryLight,
       borderWidth: 2,
       color: Colors.primaryLight,
@@ -54,7 +54,7 @@ export const globalStyles = StyleSheet.create({
     },
   
     textView:{
-      paddingVertical: 15,
+      paddingVertical: 25,
     },
   
     textUnderline:{
@@ -70,7 +70,6 @@ export const globalStyles = StyleSheet.create({
       textAlign: 'center',
       color: Colors.primaryLight,
       fontFamily: 'Montserrat',
-      textDecorationLine: 'underline'
     },
 
     title:{
@@ -78,6 +77,12 @@ export const globalStyles = StyleSheet.create({
       color: Colors.primaryLight,
       fontSize: 20,
       fontFamily: 'Montserrat-Bold'
+    },
+
+    logo:{
+      width: 150,
+      height: 150,
+      resizeMode: 'contain'
     }
   
   })
