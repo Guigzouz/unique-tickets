@@ -9,9 +9,10 @@ import * as SecureStore from 'expo-secure-store';
 
 
 
-
+// const LoginScreen = (route) => {
 const LoginScreen = () => {
   
+  // const { refreshNavigation } = route.params;
 
   const [token, setToken] = useState('')
   const [email, setEmail] = useState('')
@@ -19,19 +20,6 @@ const LoginScreen = () => {
   const [error, setError] = useState('')
   const navigation = useNavigation();
 
-  // async function getToken(){
-  //   try {
-  //     const user = auth.currentUser;
-  //       if (user) {
-  //         const idTokenResult = await user.getIdTokenResult();
-  //         setToken(idTokenResult.token);
-  //         console.log('token set')
-          
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
 
   async function getToken(){
     try {
@@ -88,6 +76,8 @@ const LoginScreen = () => {
     }
 
     getValueFor('jwt')
+    // refreshNavigation();
+    
 }
 
 

@@ -2,18 +2,27 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import SearchScreen from './screens/logged/SearchScreen';
 import * as SecureStore from 'expo-secure-store';
 import connectionStore from './store/ConnectionStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
+import ActuScreen from './screens/logged/ActuScreen';
+import ProfileScreen from './screens/logged/ProfileScreen';
+import TicketScreen from './screens/logged/TicketScreen';
+import CustomHeader from './components/CustomHeader';
+
 
 
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
 
 async function getValueFor(key) {
   let result = await SecureStore.getItemAsync(key);
@@ -30,8 +39,10 @@ async function getValueFor(key) {
 
 
 export default function App() {
+  // useState qui permet de refresh le fichier APP.JS
+  const [refreshKey, setRefreshKey] = useState(0);
 
-
+  
   // Expo font hook, s'assure de charger les polices
   const [fontsLoaded] = useFonts({
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
@@ -41,8 +52,12 @@ export default function App() {
 
   // déclare les etats de connexion pour le store zustand
   const { connected, setConnected, setDisconnected } = connectionStore();
-  
 
+
+  function refreshNavigation() {
+    setRefreshKey(refreshKey + 1);
+  }
+  
   // change l'état en fonction de la presence ou non d'un jwt
   useEffect(() => {
     getValueFor('jwt').then((jwt) => {
@@ -61,13 +76,26 @@ export default function App() {
     return null;
   }
 
+// défini le TabNavigator qui sera utilisé quand user est connecté
+  function MainTabNavigator() {
+    return (
+      <Tab.Navigator initialRouteName='MainTab'>
+        <Tab.Screen name="Search" options={{ headerShown : false}} component={SearchScreen} />
+        <Tab.Screen name="Actu" options={{ headerShown : false}} component={ActuScreen} />
+        <Tab.Screen name="Ticket" options={{ headerShown : false}} component={TicketScreen} />
+      </Tab.Navigator>
+    );
+  }
+
+
   return (
     <NavigationContainer>
 
-    <Stack.Navigator>
+    <Stack.Navigator key={refreshKey} screenOptions={{header: CustomHeader}}>
       {
         !connected &&
         <>
+        {/* <Stack.Screen options={{headerShown : false}} name="Login" component={LoginScreen} initialParams={{refreshNavigation}}/> */}
         <Stack.Screen options={{headerShown : false}} name="Login" component={LoginScreen} />
         <Stack.Screen options={{headerShown : true}} name="Register" component={RegisterScreen} />
         <Stack.Screen options={{headerShown : true}} name="ForgotPassword" component={ForgotPasswordScreen}/>
@@ -78,7 +106,8 @@ export default function App() {
       {
         connected &&
         <>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="MainTab" component={MainTabNavigator} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
         </>
       }
 
@@ -86,14 +115,6 @@ export default function App() {
 
     </NavigationContainer>
 
-    // <NavigationContainer>
-    //   <Stack.Navigator>
-        // <Stack.Screen options={{headerShown : false}} name="Login" component={LoginScreen} />
-        // <Stack.Screen options={{headerShown : true}} name="Register" component={RegisterScreen} />
-        // <Stack.Screen options={{headerShown : true}} name="ForgotPassword" component={ForgotPasswordScreen}/>
-        // <Stack.Screen options={{headerShown : false}} name="Home" component={HomeScreen} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
   );
 }
 
