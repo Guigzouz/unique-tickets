@@ -9,23 +9,13 @@ import { globalStyles } from '../../styles/global'
 
 
 const ProfileScreen = () => {
-  const user = auth.currentUser;
-
-
-  const deleteSecureItem = async (key) => {
-    try {
-      await SecureStore.deleteItemAsync(key);
-      console.log(`Successfully deleted key: ${key}`);
-    } catch (error) {
-      console.log(`Error deleting key: ${key}. Error: ${error}`);
-    }
-  }
 
   
     const handleSignOut = () => {
+      console.log('il faut ajouter le logout global mtn')
+
       signOut(auth)
       .then(() => {
-        deleteSecureItem('jwt');
       })
       .catch(error => alert(error.message))
     }

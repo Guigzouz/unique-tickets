@@ -4,57 +4,32 @@ import firebase from '../../firebase';
 import { auth } from '../../firebase'
 import { signOut } from 'firebase/auth'
 import { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
-import { globalStyles } from '../../styles/global'
+import { globalStyles } from '../../styles/global';
 
 
 
 const SearchScreen = () => {
 
-    const [user, setUser] = useState(null);
-    
 
-    // Get the current user's ID token
-    const getCurrentUser = async (key) => {
-      const idToken = await SecureStore.getItemAsync(key);
-      // Decode the ID token to get user information
-      const decodedToken = await auth.verifyIdToken(idToken);
-      console.log("here is the decoded one :",decodedToken)
-      // Set the user's information to the state
-      setUser(decodedToken);
-    };
-
-    getCurrentUser('jwt');
-
-
-
-  const deleteSecureItem = async (key) => {
-    try {
-      await SecureStore.deleteItemAsync(key);
-      console.log(`Successfully deleted key: ${key}`);
-    } catch (error) {
-      console.log(`Error deleting key: ${key}. Error: ${error}`);
-    }
-  }
 
   
-    const handleSignOut = () => {
-      signOut(auth)
-      .then(() => {
-        deleteSecureItem('jwt');
-      })
-      .catch(error => alert(error.message))
-    }
-    
+  const handleSignOut = () => {
+    console.log('il faut ajouter le logout global mtn')
+
+    signOut(auth)
+    .then(() => {
+    })
+    .catch(error => alert(error.message))
+  }
     
   
   return (
 
     <View style={globalStyles.container}>
 
-      {/* le point d'intérogation de currentUser indique que cette variable peut être undefined et evite un crash de l'app */}
-      <Text>Hey salut {user && user.name} !</Text>
+      <Text>Hey salut !</Text>
       <View style={globalStyles.buttonContainer}>
       <TouchableOpacity
         style={globalStyles.button}

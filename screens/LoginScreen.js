@@ -6,79 +6,42 @@ import { useNavigation } from '@react-navigation/native'
 import { globalStyles } from '../styles/global'
 import { Colors } from '../styles/colors'
 import * as SecureStore from 'expo-secure-store';
+import useAuthStore from '../store/AuthStore'
+
 
 
 
 // const LoginScreen = (route) => {
-const LoginScreen = () => {
-  
-  // const { refreshNavigation } = route.params;
-
-  const [token, setToken] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const navigation = useNavigation();
-
-
-  async function getToken(){
-    try {
-      const user = auth.currentUser;
-        if (user) {
-          const idTokenResult = await user.getIdTokenResult();
-          return idTokenResult?.token
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-
-    async function getValueFor(key) {
-      let result = await SecureStore.getItemAsync(key);
-      if (result) {
-        console.log("🔐 Here's your value in LoginScreen 🔐 \n" + result);
-      } else {
-        console.log('No values stored under that key.');
-      }
-    }
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, user => {
-  //     if (user){
-  //       console.log('here')
-  //     }
-  //   }) 
+  const LoginScreen = () => {
     
+    // const { refreshNavigation } = route.params;
+    const { login } = useAuthStore();
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const navigation = useNavigation();
     
-  //   // unsubscribe va stopper le listner firebase lorsque l'utilisateur sort de la page login
-  //   return unsubscribe
-  // }, [])
-
-    // await signInWithEmailAndPassword(auth, email, password)
-    // .then(async userCredentials => {
-    //   const user = userCredentials.user;
-    //   console.log('firebase logged in :', user.email)
-    // }).catch(error => setError(error.message))
-    
-    // getToken()
-
 
   const handleLogin = async () => { 
     try {
-    await signInWithEmailAndPassword(auth, email, password)
- 
-     const userToken = await getToken();
-     await SecureStore.setItemAsync('jwt', JSON.stringify(userToken));
-     setToken(userToken);
+    await signInWithEmailAndPassword(auth, email, password).then(userCredentials =>{
+      const user = userCredentials.user
+      console.log('firebase logged in :', user.email)
+
+    }).catch(error => setError(error.message))
     } catch (err) {
      console.log(err.message)
     }
+  }
 
-    getValueFor('jwt')
-    // refreshNavigation();
-    
-}
+  // const handleLogin = async () => {
+  //   try {
+  //     await login(email, password);
+  //   } catch (err) {
+  //     setError(err.message);
+  //   }
+  // };
+  
 
 
   

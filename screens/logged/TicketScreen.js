@@ -9,27 +9,15 @@ import { globalStyles } from '../../styles/global'
 
 
 const TicketScreen = () => {
-  const user = auth.currentUser;
-
-
-  const deleteSecureItem = async (key) => {
-    try {
-      await SecureStore.deleteItemAsync(key);
-      console.log(`Successfully deleted key: ${key}`);
-    } catch (error) {
-      console.log(`Error deleting key: ${key}. Error: ${error}`);
-    }
-  }
-
   
-    const handleSignOut = () => {
-      signOut(auth)
-      .then(() => {
-        deleteSecureItem('jwt');
-      })
-      .catch(error => alert(error.message))
-    }
-    
+  const handleSignOut = () => {
+    console.log('il faut ajouter le logout global mtn')
+
+    signOut(auth)
+    .then(() => {
+    })
+    .catch(error => alert(error.message))
+  }
     
   
   return (
