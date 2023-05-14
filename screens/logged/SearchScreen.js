@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import firebase from '../../firebase';
-import { auth } from '../../firebase'
+import { auth, db } from '../../firebase'
 import { signOut } from 'firebase/auth'
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -11,8 +11,15 @@ import { globalStyles } from '../../styles/global';
 
 
 const SearchScreen = () => {
+  const [userName, setUserName] = useState('');
 
+  useEffect(() => {
+    const unsubscribe = db.collection('users').doc(auth.currentUser.uid).onSnapshot(snapshot => {
+      setUserName(snapshot.data().name);
+    });
 
+    return () => unsubscribe();
+  }, []);
 
   
   const handleSignOut = () => {
@@ -29,7 +36,7 @@ const SearchScreen = () => {
 
     <View style={globalStyles.container}>
 
-      <Text>Hey salut !</Text>
+      <Text>Hey {userName} !</Text>
       <View style={globalStyles.buttonContainer}>
       <TouchableOpacity
         style={globalStyles.button}

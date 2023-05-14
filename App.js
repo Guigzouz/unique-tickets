@@ -65,7 +65,7 @@ export default function App() {
     // Render your login screen.
     return (
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{header: CustomHeader}}>
           <Stack.Screen options={{headerShown : false}} name="Login" component={LoginScreen} />
           <Stack.Screen options={{headerShown : true}} name="Register" component={RegisterScreen} />
           <Stack.Screen options={{headerShown : true}} name="ForgotPassword" component={ForgotPasswordScreen}/>

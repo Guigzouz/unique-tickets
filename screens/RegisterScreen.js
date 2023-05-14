@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import { globalStyles } from '../styles/global'
@@ -15,15 +15,35 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
 
+  // const handleSignUp = async () => {
+  //   await createUserWithEmailAndPassword(auth, email, password)
+  //   .then(userCredentials => {
+  //     return db.collection('users').doc(userCredentials.user.uid).set({
+  //       name: name.valueOf
+  //     });
+  //   }).then(() => {
+      
+  //     const user = userCredentials.user;
+  //     console.log('registered with:',user.email);
+  //   })
+  //   .catch(error => alert(error.message))
+  // }
+
   const handleSignUp = async () => {
-    await createUserWithEmailAndPassword(auth, email, password)
-    .then(userCredentials => {
+    let userCredentials;
+    try {
+      userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+      // ajoute a la collection user, un utilisateur avec un nom et un lien entre les deux collections
+      await db.collection('users').doc(userCredentials.user.uid).set({
+        name: name
+      });
       const user = userCredentials.user;
       console.log('registered with:',user.email);
-    })
-    .catch(error => alert(error.message))
+    } catch (error) {
+      console.log(error.message);
+    }
   }
-
+  
   return (
     <KeyboardAvoidingView
       style={globalStyles.container}
