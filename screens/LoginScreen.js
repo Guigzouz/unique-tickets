@@ -34,13 +34,15 @@ import useAuthStore from '../store/AuthStore'
     }
   }
 
-  // const handleLogin = async () => {
-  //   try {
-  //     await login(email, password);
-  //   } catch (err) {
-  //     setError(err.message);
-  //   }
-  // };
+// const handleLogin = async () => {
+//   try {
+//     console.log("login content:", login)
+//     await login(email, password);
+//     console.log('logged in successfully')
+//   } catch (err) {
+//     setError(err.message);
+//   }
+// };
   
 
 
