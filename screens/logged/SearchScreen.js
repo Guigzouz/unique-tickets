@@ -4,9 +4,11 @@ import { db } from '../../firebase';
 import { globalStyles } from '../../styles/global';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Colors } from '../../styles/colors';
+import SearchBar from '../../components/SearchBar';
 
 const SearchScreen = ({ navigation }) => {
   const [events, setEvents] = useState([]);
+  const [searchPhrase, setSearchPhrase] = useState("");
 
   useEffect(() => {
     const getEvents = async () => {
@@ -30,6 +32,10 @@ const SearchScreen = ({ navigation }) => {
 
   return (
     <View style={globalStyles.container}>
+      <SearchBar
+        searchPhrase={searchPhrase}
+        setSearchPhrase={setSearchPhrase}
+      />
       <ScrollView contentContainerStyle={eventStyles.container}>
         {events.map((event) => (
           <TouchableOpacity
@@ -60,13 +66,13 @@ export default SearchScreen;
 const { width } = Dimensions.get('window');
 const eventStyles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
   post: {
     width: width / 2 - 25,
-    margin: 10,
+    marginHorizontal: 10,
+    marginBottom: 10,
     padding: 10,
     backgroundColor: Colors.postColor,
     borderRadius: 15
