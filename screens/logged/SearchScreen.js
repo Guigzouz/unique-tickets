@@ -1,77 +1,97 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import firebase from '../../firebase';
-import { auth, db } from '../../firebase'
-import { signOut } from 'firebase/auth'
-import { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { db } from '../../firebase';
 import { globalStyles } from '../../styles/global';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Colors } from '../../styles/colors';
 
-
-
-const SearchScreen = () => {
-  const [userName, setUserName] = useState('');
+const SearchScreen = ({ navigation }) => {
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = db.collection('users').doc(auth.currentUser.uid).onSnapshot(snapshot => {
-      setUserName(snapshot.data().name);
-    });
+    const getEvents = async () => {
+      try {
+        const querySnapshot = await db.collection('events').get();
+        const data = querySnapshot.docs.map((doc) => doc.data());
+        setEvents(data);
+      } catch (error) {
+        console.log('Error fetching events:', error);
+      }
+    };
 
-    return () => unsubscribe();
+    getEvents();
   }, []);
 
-  
-  const handleSignOut = () => {
-    console.log('il faut ajouter le logout global mtn')
+  const formatDate = (timestamp) => {
+    const dateObject = new Date(timestamp * 1000);
+    const formattedDate = dateObject.toLocaleDateString();
+    return formattedDate;
+  };
 
-    signOut(auth)
-    .then(() => {
-    })
-    .catch(error => alert(error.message))
-  }
-    
-  
   return (
-
     <View style={globalStyles.container}>
-
-      <Text>Hey {userName} !</Text>
-      <View style={globalStyles.buttonContainer}>
-      <TouchableOpacity
-        style={globalStyles.button}
-        onPress={handleSignOut}
-      >
-        <Text style={globalStyles.buttonText}>Cash out</Text>
-      </TouchableOpacity>
-      </View>
+      <ScrollView contentContainerStyle={eventStyles.container}>
+        {events.map((event) => (
+          <TouchableOpacity
+            key={event.id}
+            onPress={() =>
+              navigation.navigate('Event', { eventId: event.id })
+            }
+            style={eventStyles.post}
+          >
+            <Image source={{
+              uri: event.image
+              }} style={eventStyles.image}>
+              </Image>
+            <Text style={eventStyles.title}>{event.title}</Text>
+            <Text style={eventStyles.secondaryText}>{event.artist}</Text>
+            <Text style={eventStyles.secondaryText}>{event.city} - {event.salle}</Text>
+            <Text style={eventStyles.secondaryText}>{formatDate(event.date.seconds)}</Text>
+            <Text style={eventStyles.price}>à partir de {event.startingPrice} €</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default SearchScreen
+export default SearchScreen;
 
-const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+const { width } = Dimensions.get('window');
+const eventStyles = StyleSheet.create({
+  container: {
+    paddingVertical: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
-
-  button:{
-    backgroundColor: '#da4116',
-    width: '60%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 40
-   
+  post: {
+    width: width / 2 - 25,
+    margin: 10,
+    padding: 10,
+    backgroundColor: Colors.postColor,
+    borderRadius: 15
   },
-
-  buttonText:{
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16
+  image: {
+    width: '100%',
+    height: 120,
+    resizeMode: 'cover',
+    borderRadius: 15
   },
-
-})
+  title:{
+    paddingTop: 5,
+    textAlign: 'left',
+    color: Colors.primaryLight,
+    fontFamily: 'Montserrat',
+  },
+  secondaryText:{
+    textAlign: 'left',
+    color: Colors.postSecondaryColor,
+    fontFamily: 'Montserrat-Italic',
+  },
+  price:{
+    marginTop: 25,
+    textAlign: 'right',
+    color: Colors.primaryLight,
+    fontFamily: 'Montserrat'
+  }
+});

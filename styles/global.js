@@ -9,7 +9,7 @@ export const globalStyles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.primaryDark
+      backgroundColor: Colors.primaryDark,
     },
   
     inputContainer:{
@@ -43,7 +43,6 @@ export const globalStyles = StyleSheet.create({
       padding: 15,
       borderRadius: 10,
       alignItems: 'center'
-     
     },
   
     buttonText:{
@@ -51,6 +50,28 @@ export const globalStyles = StyleSheet.create({
       fontWeight: '700',
       fontSize: 16,
       fontFamily: 'Montserrat-Bold'
+    },
+
+    invertButton:{
+      flexDirection: 'row',
+      backgroundColor: Colors.primaryDark,
+      borderColor: Colors.primaryLight,
+      borderWidth: 2,
+      width: '100%',
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center'
+    },
+  
+    invertButtonText:{
+      color: Colors.primaryLight,
+      fontWeight: '700',
+      fontSize: 16,
+      fontFamily: 'Montserrat-Bold'
+    },
+
+    buttonIcon:{
+      paddingLeft: 10
     },
   
     textView:{
@@ -83,6 +104,15 @@ export const globalStyles = StyleSheet.create({
       width: 150,
       height: 150,
       resizeMode: 'contain'
+    },
+
+    nusarTitle:{
+      fontFamily: 'Nusar',
+      color: Colors.primaryLight,
+      fontSize: 26,
+      textAlign: 'left',
+      textTransform: 'uppercase',
+
     }
   
   })

@@ -7,5 +7,10 @@ export const Colors = {
     dimmedLight: '#69636b',
 
     primaryPurple: '#8f00ff',
-    secondaryPurple: '#520191'
+    secondaryPurple: '#520191',
+
+    // colors variants
+
+    postColor: '#2a282b',
+    postSecondaryColor: '#606060'
 }

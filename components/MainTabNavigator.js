@@ -28,8 +28,8 @@ function MainTabNavigator() {
 
       })}
       >
-        <Tab.Screen name="Actu" options={{ headerShown : false}} component={ActuScreen} />
         <Tab.Screen name="Search" options={{ headerShown : false}} component={SearchScreen} />
+        <Tab.Screen name="Actu" options={{ headerShown : false}} component={ActuScreen} />
         <Tab.Screen name="Ticket" options={{ headerShown : false}} component={TicketScreen} />
         {/* rechanger le sens apres custom tabbar */}
       </Tab.Navigator>

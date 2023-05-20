@@ -31,6 +31,7 @@ export default function App() {
     'Montserrat': require('./assets/fonts/Montserrat-Regular.ttf'),
     'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
     'Montserrat-Italic': require('./assets/fonts/Montserrat-Italic.ttf'),
+    'Nusar': require('./assets/fonts/NUSAR-Regular.ttf'),
   });
 
 // s'assure que les polices sont bien chargées
@@ -39,7 +40,7 @@ export default function App() {
   }
 
 
-  if (!user) {
+  if (user) {
     // Render your login screen.
     return (
       <NavigationContainer>
