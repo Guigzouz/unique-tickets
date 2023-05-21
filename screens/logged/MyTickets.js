@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { auth, db } from '../../firebase'
 import { signOut } from 'firebase/auth'
@@ -8,17 +8,7 @@ import { globalStyles } from '../../styles/global'
 
 
 
-const ActuScreen = () => {
-
-  const [userName, setUserName] = useState('');
-
-  useEffect(() => {
-    const unsubscribe = db.collection('users').doc(auth.currentUser.uid).onSnapshot(snapshot => {
-      setUserName(snapshot.data().name);
-    });
-
-    return () => unsubscribe();
-  }, []);
+const MyTickets = () => {
 
   
   const handleSignOut = () => {
@@ -34,27 +24,20 @@ const ActuScreen = () => {
   return (
 
     <View style={globalStyles.container}>
-
-      <Text>Hey {userName} !</Text>
-      <View style={globalStyles.buttonContainer}>
-      <TouchableOpacity
-        style={globalStyles.button}
-        onPress={handleSignOut}
-      >
-        <Text style={globalStyles.buttonText}>Cash out</Text>
-      </TouchableOpacity>
-      </View>
+      <ScrollView contentContainerStyle={myticketStyles.container}>
+        <Text style={globalStyles.nusarTitle}>Mes billets</Text>
+      </ScrollView>
     </View>
   )
 }
 
-export default ActuScreen
+export default MyTickets
 
-const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+const myticketStyles = StyleSheet.create({
+  container: {
+    width: '100%',
+    paddingVertical: 35,
+    paddingHorizontal: 25,
   },
 
   button:{

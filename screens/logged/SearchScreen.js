@@ -14,7 +14,10 @@ const SearchScreen = ({ navigation }) => {
     const getEvents = async () => {
       try {
         const querySnapshot = await db.collection('events').get();
-        const data = querySnapshot.docs.map((doc) => doc.data());
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setEvents(data);
       } catch (error) {
         console.log('Error fetching events:', error);
@@ -29,6 +32,8 @@ const SearchScreen = ({ navigation }) => {
     const formattedDate = dateObject.toLocaleDateString();
     return formattedDate;
   };
+
+  
 
   return (
     <View style={globalStyles.container}>
@@ -68,10 +73,12 @@ const eventStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginHorizontal: 10,
+
   },
   post: {
-    width: width / 2 - 25,
-    marginHorizontal: 10,
+    width: width / 2 - 20,
+    marginHorizontal: 5,
     marginBottom: 10,
     padding: 10,
     backgroundColor: Colors.postColor,

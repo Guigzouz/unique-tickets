@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { auth } from '../../firebase';
+import React, { useEffect, useState } from 'react';
+import { auth, db } from '../../firebase';
 import { signOut } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
@@ -13,11 +13,17 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 
-const TicketScreen = () => {
+const TicketScreen = ({navigation}) => {
 
-  const handleEdit = () => {
-    console.log('faire un handleEdit')
-  }
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const unsubscribe = db.collection('users').doc(auth.currentUser.uid).onSnapshot(snapshot => {
+      setUserName(snapshot.data().name);
+    });
+
+    return () => unsubscribe();
+  }, []);
   
   const handleSignOut = () => {
     console.log('il faut ajouter le logout global mtn')
@@ -37,12 +43,14 @@ const TicketScreen = () => {
 
       <View style={profileStyles.infosContainer}>
         <View style={profileStyles.info}>
-          <Text style={profileStyles.text}>{auth.currentUser?.email}email dynamique</Text>
-          <Text style={profileStyles.text}>Pseudo dynamique</Text>
+          <Text style={profileStyles.text}>{auth.currentUser?.email}</Text>
+          <Text style={profileStyles.text}>{userName}</Text>
         </View>
           <TouchableOpacity 
           style={profileStyles.editInfo}
-          onPress={handleEdit}
+          onPress={() =>
+            navigation.navigate('Edit')
+          }
           >
           <Icon name="pen" size={20} color="black" />
           </TouchableOpacity>
@@ -81,7 +89,8 @@ const profileStyles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'flex-start',
     paddingVertical:25,
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
+    
 
   },
   info:{
@@ -102,7 +111,7 @@ const profileStyles = StyleSheet.create({
     fontFamily: 'Montserrat',
   },
   buttonContainer:{
-    width: '100%',
+    marginHorizontal: 50,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',

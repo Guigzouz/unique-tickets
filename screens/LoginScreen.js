@@ -6,7 +6,9 @@ import { useNavigation } from '@react-navigation/native'
 import { globalStyles } from '../styles/global'
 import { Colors } from '../styles/colors'
 import * as SecureStore from 'expo-secure-store';
-import useAuthStore from '../store/AuthStore'
+import useAuthStore from '../store/AuthStore';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 
 
@@ -33,18 +35,6 @@ import useAuthStore from '../store/AuthStore'
      console.log(err.message)
     }
   }
-
-// const handleLogin = async () => {
-//   try {
-//     console.log("login content:", login)
-//     await login(email, password);
-//     console.log('logged in successfully')
-//   } catch (err) {
-//     setError(err.message);
-//   }
-// };
-  
-
 
   
   return (
@@ -88,6 +78,8 @@ import useAuthStore from '../store/AuthStore'
         style={globalStyles.button}
         >
           <Text style={globalStyles.buttonText}>Connexion</Text>
+          <Icon style={globalStyles.buttonIcon} name="sign-out-alt" size={20} color="black" />
+
         </TouchableOpacity>
 
 

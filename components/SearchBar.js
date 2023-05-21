@@ -13,7 +13,7 @@ const SearchBar = ({searchPhrase, setSearchPhrase}) => {
           placeholder="Rechercher..."
           value={searchPhrase}
           onChangeText={setSearchPhrase}
-          placeholderTextColor={Colors.secondaryDark}
+          placeholderTextColor={Colors.secondaryLight}
           onFocus={() => {
         }}
         />

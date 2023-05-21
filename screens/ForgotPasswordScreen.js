@@ -6,7 +6,9 @@ import { useNavigation } from '@react-navigation/native'
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { globalStyles } from '../styles/global';
-import { Colors } from '../styles/colors'
+import { Colors } from '../styles/colors';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 
 const ForgotPasswordScreen = () => {
@@ -58,6 +60,8 @@ const ForgotPasswordScreen = () => {
         style={globalStyles.button}
         >
           <Text style={globalStyles.buttonText}>Envoyer le mail</Text>
+          <Icon style={globalStyles.buttonIcon} name="paper-plane" size={20} color="black" />
+
         </TouchableOpacity>
 
       </View>

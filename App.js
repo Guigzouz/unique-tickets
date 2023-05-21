@@ -11,6 +11,8 @@ import ProfileScreen from './screens/logged/ProfileScreen';
 import CustomHeader from './components/CustomHeader';
 import useAuthStore from './store/AuthStore';
 import MainTabNavigator from './components/MainTabNavigator';
+import Event from './screens/singles/Event';
+import EditProfile from './screens/logged/EditProfile';
 
 
 const Stack = createNativeStackNavigator();
@@ -40,7 +42,7 @@ export default function App() {
   }
 
 
-  if (user) {
+  if (!user) {
     // Render your login screen.
     return (
       <NavigationContainer>
@@ -59,7 +61,8 @@ export default function App() {
   <NavigationContainer>
     <Stack.Navigator screenOptions={{header: CustomHeader}}>
         <Stack.Screen name="MainTab" component={MainTabNavigator} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Event" component={Event} />
+        <Stack.Screen name="Edit" component={EditProfile} />
     </Stack.Navigator>
   </NavigationContainer>
 

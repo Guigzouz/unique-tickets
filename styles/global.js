@@ -10,6 +10,7 @@ export const globalStyles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: Colors.primaryDark,
+      paddingBottom: 120
     },
   
     inputContainer:{
@@ -22,7 +23,7 @@ export const globalStyles = StyleSheet.create({
       paddingHorizontal: 15,
       paddingVertical: 15,
       borderRadius: 15,
-      marginTop: 25,
+      marginTop: 15,
       borderColor: Colors.primaryLight,
       borderWidth: 2,
       color: Colors.primaryLight,
@@ -38,11 +39,13 @@ export const globalStyles = StyleSheet.create({
     },
   
     button:{
+      flexDirection: 'row',
       backgroundColor: Colors.primaryLight,
       width: '100%',
       padding: 15,
       borderRadius: 10,
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center'
     },
   
     buttonText:{
@@ -60,7 +63,9 @@ export const globalStyles = StyleSheet.create({
       width: '100%',
       padding: 15,
       borderRadius: 10,
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center'
+
     },
   
     invertButtonText:{
@@ -113,6 +118,11 @@ export const globalStyles = StyleSheet.create({
       textAlign: 'left',
       textTransform: 'uppercase',
 
-    }
+    },
+    secondaryText:{
+      textAlign: 'left',
+      color: Colors.postSecondaryColor,
+      fontFamily: 'Montserrat-Italic',
+    },
   
   })
