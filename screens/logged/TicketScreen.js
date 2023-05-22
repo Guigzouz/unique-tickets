@@ -7,14 +7,15 @@ import * as SecureStore from 'expo-secure-store';
 import { globalStyles } from '../../styles/global';
 import { Colors } from '../../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import PreviousEvents from '../../components/PreviousEvents';
 
 
 
 
 
 
-const TicketScreen = ({navigation}) => {
-
+const TicketScreen = () => {
+  const navigation = useNavigation();
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
@@ -38,9 +39,8 @@ const TicketScreen = ({navigation}) => {
   return (
 
     <View style={globalStyles.container}>
-      <ScrollView contentContainerStyle={profileStyles.container}>
-      <Text style={globalStyles.nusarTitle}>mes informations</Text>
-
+      <View style={profileStyles.container}>
+        <Text style={globalStyles.nusarTitle}>mes informations</Text>
       <View style={profileStyles.infosContainer}>
         <View style={profileStyles.info}>
           <Text style={profileStyles.text}>{auth.currentUser?.email}</Text>
@@ -54,8 +54,8 @@ const TicketScreen = ({navigation}) => {
           >
           <Icon name="pen" size={20} color="black" />
           </TouchableOpacity>
+          
       </View>
-
       <View style={profileStyles.buttonContainer}>
       <TouchableOpacity
         style={globalStyles.invertButton}
@@ -67,8 +67,9 @@ const TicketScreen = ({navigation}) => {
       </TouchableOpacity>
       </View>
       <Text style={globalStyles.nusarTitle}>mes anciens billets</Text>
+      </View>
 
-      </ScrollView>
+      <PreviousEvents navigation={navigation}/>
 
       {/* le point d'intérogation de currentUser indique que cette variable peut être undefined et evite un crash de l'app */}
     </View>
@@ -82,6 +83,7 @@ const profileStyles = StyleSheet.create({
     width: '100%',
     paddingVertical: 35,
     paddingHorizontal: 25,
+    height: '55%'
   },
   infosContainer:{
     flex: 1,
