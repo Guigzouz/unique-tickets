@@ -3,14 +3,15 @@ import TicketScreen from '../screens/logged/TicketScreen';
 import SearchScreen from '../screens/logged/SearchScreen';
 import { Colors } from '../styles/colors';
 import MyTickets from '../screens/logged/MyTickets';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { globalStyles } from '../styles/global';
 
 const Tab = createBottomTabNavigator();
 
 function MainTabNavigator() {
   return (
-    <Tab.Navigator 
+    <Tab.Navigator
       initialRouteName='MainTab'
       screenOptions={({ route }) => ({
         tabBarStyle: {
@@ -28,22 +29,26 @@ function MainTabNavigator() {
           justifyContent: 'flex-end',
         },
         tabBarIcon: ({ focused, color, size }) => {
+          let IconComponent;
           let iconName;
 
           if (route.name === 'Mes Billets') {
+            IconComponent = FontAwesome;
             iconName = focused ? 'ticket' : 'ticket'; // Change the icon name and color based on focus
           } else if (route.name === 'Fil d\'actu') {
-            iconName = focused ? 'newspaper-o' : 'newspaper-o'; // Change the icon name and color based on focus
+            IconComponent = Ionicons;
+            iconName = focused ? 'newspaper' : 'newspaper-outline'; // Change the icon name and color based on focus
           } else if (route.name === 'Profil') {
-            iconName = focused ? 'user-o' : 'user-o'; // Change the icon name and color based on focus
+            IconComponent = FontAwesome;
+            iconName = focused ? 'user' : 'user-o'; // Change the icon name and color based on focus
           }
 
           // Return the custom icon component
-          return <Icon style={globalStyles.buttonIcon} name={iconName} size={size} color={color} />;
+          return <IconComponent style={globalStyles.buttonIcon} name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: Colors.primaryPurple,
         tabBarInactiveTintColor: 'grey',
-        
+
       })}
     >
       <Tab.Screen
