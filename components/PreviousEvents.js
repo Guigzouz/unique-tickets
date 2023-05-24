@@ -49,30 +49,24 @@ const PreviousEvents = ({navigation}) => {
   
   return (
 
-    <ScrollView contentContainerStyle={myTicketsStyles.container}>
-        {events.map((events) => (
+<ScrollView contentContainerStyle={eventStyles.container}>
+        {events.map((event) => (
           <TouchableOpacity
-            key={events.id}
+            key={event.id}
             onPress={() =>
-              navigation.navigate('Event', { eventId: events.id })
+              navigation.navigate('Event', { eventId: event.id })
             }
-            style={myTicketsStyles.post}
+            style={eventStyles.post}
           >
-          <View style={singleStyles.container}>
             <Image source={{
-              uri: events.image
-              }} style={singleStyles.image}>
+              uri: event.image
+              }} style={eventStyles.image}>
               </Image>
-
-              <View style={singleStyles.metaContainer}>
-                <Text style={globalStyles.nusarTitle}>{events.title}</Text>
-                <Text style={globalStyles.secondaryText}>{events.eventType}</Text>
-                <Text style={globalStyles.secondaryText}>{events.capacity} places</Text>
-                <Text style={globalStyles.secondaryText}>{events.city} - {events.salle}</Text>
-                <Text style={globalStyles.secondaryText}>{formatDate(events.date.seconds)}</Text>
-
-              </View>
-              </View>
+            <Text style={eventStyles.title}>{event.title}</Text>
+            <Text style={eventStyles.secondaryText}>{event.artist}</Text>
+            <Text style={eventStyles.secondaryText}>{event.city} - {event.salle}</Text>
+            <Text style={eventStyles.secondaryText}>{formatDate(event.date.seconds)}</Text>
+            <Text style={eventStyles.price}>à partir de {event.startingPrice} €</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -82,39 +76,45 @@ const PreviousEvents = ({navigation}) => {
 export default PreviousEvents
 
 
-const myTicketsStyles = StyleSheet.create({
+const { width } = Dimensions.get('window');
+const eventStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: 5,
+    marginHorizontal: 10,
+    width: width
 
   },
   post: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: 10,
-  },
-})
-
-const singleStyles = StyleSheet.create({
-  container:{
-    height: '100%',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    backgroundColor: Colors.secondaryDark,
-    borderRadius: 15,
-    justifyContent:'center'
-  },
-  metaContainer:{
-    width: '65%',
-    paddingHorizontal: 10
+    width: width / 2 - 20,
+    marginHorizontal: 5,
+    marginBottom: 10,
+    padding: 10,
+    backgroundColor: Colors.postColor,
+    borderRadius: 15
   },
   image: {
-      width: '35%',
-      height: '100%',
-      resizeMode: 'cover',
-      borderRadius: 15
+    width: '100%',
+    height: 120,
+    resizeMode: 'cover',
+    borderRadius: 15
+  },
+  title:{
+    paddingTop: 5,
+    textAlign: 'left',
+    color: Colors.primaryLight,
+    fontFamily: 'Montserrat',
+  },
+  secondaryText:{
+    textAlign: 'left',
+    color: Colors.postSecondaryColor,
+    fontFamily: 'Montserrat-Italic',
+  },
+  price:{
+    marginTop: 25,
+    textAlign: 'right',
+    color: Colors.primaryLight,
+    fontFamily: 'Montserrat'
   }
+
 });
