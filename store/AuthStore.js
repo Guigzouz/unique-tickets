@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth'
+
 
 const useAuthStore = create((set) => ({
   user: null,
@@ -16,7 +18,7 @@ const useAuthStore = create((set) => ({
 
   login: async (email, password) => {
     try {
-      const userCredential = await auth.signInWithEmailAndPassword(email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       set({ user });
       return user;

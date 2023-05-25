@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { db } from '../../firebase';
 import { globalStyles } from '../../styles/global';
 import { StyleSheet, Dimensions } from 'react-native';
@@ -9,23 +9,24 @@ import SearchBar from '../../components/SearchBar';
 const SearchScreen = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [searchPhrase, setSearchPhrase] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const getEvents = async () => {
-      try {
-        const querySnapshot = await db.collection('events').get();
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setEvents(data);
-      } catch (error) {
-        console.log('Error fetching events:', error);
-      }
-    };
-
-    getEvents();
+    fetchEvents();
   }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const querySnapshot = await db.collection('events').get();
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEvents(data);
+    } catch (error) {
+      console.log('Error fetching events:', error);
+    }
+  };
 
   const formatDate = (timestamp) => {
     const dateObject = new Date(timestamp * 1000);
@@ -33,7 +34,15 @@ const SearchScreen = ({ navigation }) => {
     return formattedDate;
   };
 
-  
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchEvents().then(() => {
+      setRefreshing(false);
+    }).catch((error) => {
+      console.error(error);
+      setRefreshing(false);
+    });
+  };
 
   return (
     <View style={globalStyles.container}>
@@ -41,19 +50,23 @@ const SearchScreen = ({ navigation }) => {
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
       />
-      <ScrollView contentContainerStyle={eventStyles.container}>
+      <ScrollView
+        contentContainerStyle={eventStyles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={Colors.primaryLight} // Définir la couleur de l'icône de chargement
+          />
+        }
+      >
         {events.map((event) => (
           <TouchableOpacity
             key={event.id}
-            onPress={() =>
-              navigation.navigate('Event', { eventId: event.id })
-            }
+            onPress={() => navigation.navigate('Event', { eventId: event.id })}
             style={eventStyles.post}
           >
-            <Image source={{
-              uri: event.image
-              }} style={eventStyles.image}>
-              </Image>
+            <Image source={{ uri: event.image }} style={eventStyles.image} />
             <Text style={eventStyles.title}>{event.title}</Text>
             <Text style={eventStyles.secondaryText}>{event.artist}</Text>
             <Text style={eventStyles.secondaryText}>{event.city} - {event.salle}</Text>
@@ -74,7 +87,6 @@ const eventStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginHorizontal: 10,
-
   },
   post: {
     width: width / 2 - 20,
@@ -90,18 +102,18 @@ const eventStyles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 15
   },
-  title:{
+  title: {
     paddingTop: 5,
     textAlign: 'left',
     color: Colors.primaryLight,
     fontFamily: 'Montserrat',
   },
-  secondaryText:{
+  secondaryText: {
     textAlign: 'left',
     color: Colors.postSecondaryColor,
     fontFamily: 'Montserrat-Italic',
   },
-  price:{
+  price: {
     marginTop: 25,
     textAlign: 'right',
     color: Colors.primaryLight,

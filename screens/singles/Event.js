@@ -1,5 +1,5 @@
 import { Image, View, ActivityIndicator, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { db } from '../../firebase';
+import { auth, db } from '../../firebase';
 import { getDoc, doc } from 'firebase/firestore';
 import { globalStyles } from '../../styles/global';
 import { useEffect, useState } from 'react';
@@ -13,6 +13,22 @@ const Event = ({ route, navigation }) => {
   const [docSnap, setDocSnap] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
+
+
+  async function takeTicket(userId, eventId) {
+    const junctionRef = db.doc(`junction_users_events/${userId}_${eventId}`);
+    await junctionRef.set({ userId, eventId });
+    alert("Votre billet à été réservé")
+  }
+
+  const handleReservation = async () => { 
+    const userId = auth.currentUser?.uid
+    console.log("user id :",userId)
+    console.log("event id :",eventId)
+    takeTicket(userId, eventId)
+    navigation.goBack()
+  }
   useEffect(() => {
     const getCollectionData = async () => {
       try {
@@ -97,6 +113,7 @@ const Event = ({ route, navigation }) => {
 
 <View style={globalStyles.buttonContainer}>
         <TouchableOpacity
+        onPress={handleReservation}
         style={globalStyles.button}
         >
         <Text style={globalStyles.buttonText}>Réserver</Text>
