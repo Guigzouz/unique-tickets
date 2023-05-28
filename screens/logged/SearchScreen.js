@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { db } from '../../firebase';
@@ -5,6 +6,8 @@ import { globalStyles } from '../../styles/global';
 import { StyleSheet, Dimensions } from 'react-native';
 import { Colors } from '../../styles/colors';
 import SearchBar from '../../components/SearchBar';
+import Fuse from 'fuse.js';
+
 
 const SearchScreen = ({ navigation }) => {
   const [events, setEvents] = useState([]);
@@ -13,20 +16,43 @@ const SearchScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [searchPhrase]);
 
+
+  // UTILISATION DE L'ALGORITHME FUZZY SEARCH POUR GERER LES FAUTES DE FRAPPE
   const fetchEvents = async () => {
     try {
-      const querySnapshot = await db.collection('events').get();
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setEvents(data);
+      let query = db.collection('events');
+  
+      if (searchPhrase !== "") {
+        const options = {
+          keys: ['title', 'artist', 'salle'], // Specify the fields to search in
+          includeScore: true, // Include score for each result
+          threshold: 0.4, // Adjust the threshold for fuzzy matching
+        };
+        
+        const fuse = new Fuse(events, options);
+        const searchResults = fuse.search(searchPhrase);
+  
+        // Extract the matched items from the search results
+        const data = searchResults.map((result) => result.item);
+        
+        setEvents(data);
+      } else {
+        // No search phrase provided, fetch all events
+        const querySnapshot = await query.get();
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setEvents(data);
+      }
     } catch (error) {
       console.log('Error fetching events:', error);
     }
   };
+  
+  
 
   const formatDate = (timestamp) => {
     const dateObject = new Date(timestamp * 1000);

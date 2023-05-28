@@ -30,7 +30,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
     //await signInWithEmailAndPassword(auth, email, password).then(userCredentials =>{
     //  const user = userCredentials.user
      // console.log('firebase logged in :', user.email)
-      login(email, password);
 
    // }).catch(error => setError(error.message))
    // } catch (err) {

@@ -4,20 +4,23 @@ import { auth } from '../../firebase'
 import { signOut } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';
-import { globalStyles } from '../../styles/global'
+import { globalStyles } from '../../styles/global';
+import useAuthStore from '../../store/AuthStore';
+
 
 
 
 const ProfileScreen = () => {
+  const { logout } = useAuthStore();
+
 
   
     const handleSignOut = () => {
-      console.log('il faut ajouter le logout global mtn')
-
-      signOut(auth)
-      .then(() => {
-      })
-      .catch(error => alert(error.message))
+      logout();
+      // signOut(auth)
+      // .then(() => {
+      // })
+      // .catch(error => alert(error.message))
     }
     
     

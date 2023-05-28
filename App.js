@@ -15,6 +15,7 @@ import Event from './screens/singles/Event';
 import EditProfile from './screens/logged/EditProfile';
 
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

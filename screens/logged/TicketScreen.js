@@ -8,6 +8,8 @@ import { globalStyles } from '../../styles/global';
 import { Colors } from '../../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import PreviousEvents from '../../components/PreviousEvents';
+import useAuthStore from '../../store/AuthStore';
+
 
 
 
@@ -17,6 +19,8 @@ import PreviousEvents from '../../components/PreviousEvents';
 const TicketScreen = () => {
   const navigation = useNavigation();
   const [userName, setUserName] = useState('');
+  const { logout } = useAuthStore();
+
 
   useEffect(() => {
     const unsubscribe = db.collection('users').doc(auth.currentUser.uid).onSnapshot(snapshot => {
@@ -27,12 +31,7 @@ const TicketScreen = () => {
   }, []);
   
   const handleSignOut = () => {
-    console.log('il faut ajouter le logout global mtn')
-
-    signOut(auth)
-    .then(() => {
-    })
-    .catch(error => alert(error.message))
+    logout();
   }
     
   
