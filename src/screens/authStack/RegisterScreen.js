@@ -16,23 +16,6 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
-  const navigation = useNavigation();
-
-
-  // const handleSignUp = async () => {
-  //   await createUserWithEmailAndPassword(auth, email, password)
-  //   .then(userCredentials => {
-  //     return db.collection('users').doc(userCredentials.user.uid).set({
-  //       name: name.valueOf
-  //     });
-  //   }).then(() => {
-      
-  //     const user = userCredentials.user;
-  //     console.log('registered with:',user.email);
-  //   })
-  //   .catch(error => alert(error.message))
-  // }
-
   const handleSignUp = async () => {
     let userCredentials;
     try {

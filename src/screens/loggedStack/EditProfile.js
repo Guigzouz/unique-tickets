@@ -21,7 +21,6 @@ const EditProfile = () => {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
-  const navigation = useNavigation();
 
   console.log(auth.currentUser?.email)
 
