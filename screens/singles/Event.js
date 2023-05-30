@@ -5,6 +5,8 @@ import { globalStyles } from '../../styles/global';
 import { useEffect, useState } from 'react';
 import { Colors } from '../../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import React, { useCallback, useRef, useMemo } from "react";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 const Event = ({ route, navigation }) => {
   const { eventId } = route.params;
@@ -13,12 +15,23 @@ const Event = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [ticketCounts, setTicketCounts] = useState({}); // État pour stocker le nombre de tickets pour chaque catégorie
   const [ticketCategories, setTicketCategories] = useState([]);
+  // Hooks de la bottomSheet
+  const sheetRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const snapPoints = useMemo(() => ["90%"], []);
 
   async function takeTicket(userId, eventId) {
     const junctionRef = db.doc(`junction_users_events/${userId}_${eventId}`);
     await junctionRef.set({ userId, eventId });
     alert("Votre billet a été réservé");
   }
+
+
+  const handleSnapPress = useCallback((index) => {
+    sheetRef.current?.snapToIndex(index);
+    setIsOpen(true);
+
+  })
 
   const handleReservation = async () => {
     const userId = auth.currentUser?.uid;
@@ -37,7 +50,10 @@ const Event = ({ route, navigation }) => {
 
     takeTicket(userId, eventId);
     navigation.goBack();
+
   };
+
+
 
   useEffect(() => {
     const getCollectionData = async () => {
@@ -64,6 +80,14 @@ const Event = ({ route, navigation }) => {
     const formattedDate = dateObject.toLocaleDateString();
     return formattedDate;
   };
+
+  const renderBottomSheetContent = useCallback(() => (
+    <BottomSheetScrollView contentContainerStyle={singleStyles.contentContainer}>
+      <Text>Hello!</Text>
+      <Text>Hello!</Text>
+      <Text>Hello!</Text>
+    </BottomSheetScrollView>
+  ), []);
 
   if (loading) {
     return (
@@ -132,7 +156,7 @@ const Event = ({ route, navigation }) => {
 
         <View style={globalStyles.buttonContainer}>
           <TouchableOpacity
-            onPress={handleReservation}
+            onPress={() => handleSnapPress(0)}
             style={globalStyles.button}
           >
             <Text style={globalStyles.buttonText}>Réserver</Text>
@@ -140,6 +164,18 @@ const Event = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        onClose={() => setIsOpen(false)}
+        backgroundComponent={({ style }) => (
+          <View style={[style, { backgroundColor: 'white' }]} />
+        )}
+        style={globalStyles.container}
+      >
+        {renderBottomSheetContent()}
+      </BottomSheet>
     </View>
   );
 };
@@ -225,7 +261,7 @@ const singleStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.primaryLight,
     borderRadius: 15,
-    paddingHorizontal: 5,
+    paddingHorizontal: 8,
     paddingVertical: 1,
   },
   quantityButton: {
@@ -235,5 +271,8 @@ const singleStyles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Montserrat',
     color: Colors.primaryLight,
-  }
+  },
+  contentContainer: {
+    backgroundColor: "white",
+  },
 });
