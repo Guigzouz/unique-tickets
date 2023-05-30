@@ -1,12 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
-import { db } from '../../firebase';
-import { globalStyles } from '../../styles/global';
 import { StyleSheet, Dimensions } from 'react-native';
+import Fuse from 'fuse.js';
+// Import des éléments internes à l'application
+
+import { db } from '../../../firebase';
+import { globalStyles } from '../../styles/global';
 import { Colors } from '../../styles/colors';
 import SearchBar from '../../components/SearchBar';
-import Fuse from 'fuse.js';
 
 
 const SearchScreen = ({ navigation }) => {

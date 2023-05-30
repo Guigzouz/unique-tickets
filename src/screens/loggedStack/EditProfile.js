@@ -1,14 +1,21 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { auth, db } from '../firebase'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
+import { auth, db } from '../../../firebase'
 import { useNavigation } from '@react-navigation/native'
-import { globalStyles } from '../styles/global'
-import { Colors } from '../styles/colors'
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import { globalStyles } from '../../styles/global'
+import { Colors } from '../../styles/colors'
 
+const EditProfile = () => {
 
-const RegisterScreen = () => {
+    const [userName, setUserName] = useState('');
+
+    useEffect(() => {
+      const unsubscribe = db.collection('users').doc(auth.currentUser.uid).onSnapshot(snapshot => {
+        setUserName(snapshot.data().name);
+      });
+  
+      return () => unsubscribe();
+    }, []);
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,67 +23,56 @@ const RegisterScreen = () => {
 
   const navigation = useNavigation();
 
+  console.log(auth.currentUser?.email)
 
-  // const handleSignUp = async () => {
-  //   await createUserWithEmailAndPassword(auth, email, password)
-  //   .then(userCredentials => {
-  //     return db.collection('users').doc(userCredentials.user.uid).set({
-  //       name: name.valueOf
-  //     });
-  //   }).then(() => {
-      
-  //     const user = userCredentials.user;
-  //     console.log('registered with:',user.email);
-  //   })
-  //   .catch(error => alert(error.message))
-  // }
-
-  const handleSignUp = async () => {
-    let userCredentials;
-    try {
-      userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-      // ajoute a la collection user, un utilisateur avec un nom et un lien entre les deux collections
-      await db.collection('users').doc(userCredentials.user.uid).set({
-        name: name
-      });
-      const user = userCredentials.user;
-      console.log('registered with:',user.email);
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
   
   return (
     <KeyboardAvoidingView
       style={globalStyles.container}
       behavior="padding">
+        
+        <View>
+            <Text style={globalStyles.nusarTitle}>Modifier mes infos</Text>
+        </View>
 
-      <Image style={globalStyles.logo} source= {require('../assets/logo/logo.png')}></Image>
-
-
-      <View style={globalStyles.textView}>
-        <Text style={globalStyles.title}>Créer son compte</Text>
-      </View>
 
       <View style={globalStyles.inputContainer}>
         <TextInput
-          placeholder='Pseudo'
-          placeholderTextColor={Colors.dimmedLight}
+          placeholder={userName}
+          placeholderTextColor={Colors.primaryLight}
           value={name}
           onChangeText={text => setName(text)}
           style={globalStyles.input}
         />
 
         <TextInput
-          placeholder='romain.dupuis@hotmail.fr'
-          placeholderTextColor={Colors.dimmedLight}
+          placeholder={auth.currentUser?.email}
+          placeholderTextColor={Colors.primaryLight}
           value={email}
           onChangeText={text => setEmail(text)}
           style={globalStyles.input}
         />
 
         <TextInput
-          placeholder='******'
+          placeholder='Ancien mot de passe'
+          placeholderTextColor={Colors.dimmedLight}
+          value={password}
+          onChangeText={text => setPassword(text)}
+          style={globalStyles.input}
+          secureTextEntry
+        />
+
+        {/* REELLEMENT FAIRE LA MODIFICATION DE MDP */}
+        <TextInput
+          placeholder='Nouveau mot de passe'
+          placeholderTextColor={Colors.dimmedLight}
+          value={password}
+          onChangeText={text => setPassword(text)}
+          style={globalStyles.input}
+          secureTextEntry
+        />
+        <TextInput
+          placeholder='Comfirmation nouveau mot de passe'
           placeholderTextColor={Colors.dimmedLight}
           value={password}
           onChangeText={text => setPassword(text)}
@@ -89,12 +85,9 @@ const RegisterScreen = () => {
         style={globalStyles.buttonContainer}>
 
         <TouchableOpacity
-        onPress={handleSignUp}
         style={globalStyles.button}
         >
-          <Text style={globalStyles.buttonText}>S'inscrire</Text>
-          <Icon style={globalStyles.buttonIcon} name="user-plus" size={20} color="black" />
-
+          <Text style={globalStyles.buttonText}>Valider</Text>
         </TouchableOpacity>
 
       </View>
@@ -102,7 +95,7 @@ const RegisterScreen = () => {
   )
 }
 
-export default RegisterScreen
+export default EditProfile
 
 const styles = StyleSheet.create({
   container:{

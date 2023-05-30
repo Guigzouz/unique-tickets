@@ -1,6 +1,6 @@
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { auth, db } from '../firebase'
+import { auth, db } from '../../firebase'
 import { signOut } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
 import * as SecureStore from 'expo-secure-store';

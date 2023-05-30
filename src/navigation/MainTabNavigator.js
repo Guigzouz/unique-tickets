@@ -1,11 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import TicketScreen from '../screens/logged/TicketScreen';
-import SearchScreen from '../screens/logged/SearchScreen';
 import { Colors } from '../styles/colors';
-import MyTickets from '../screens/logged/MyTickets';
+import { globalStyles } from '../styles/global';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { globalStyles } from '../styles/global';
+// Import des éléments internes à l'application
+import TicketScreen from '../screens/loggedStack/TicketScreen';
+import SearchScreen from '../screens/loggedStack/SearchScreen';
+import MyTickets from '../screens/loggedStack/MyTickets';
 
 const Tab = createBottomTabNavigator();
 

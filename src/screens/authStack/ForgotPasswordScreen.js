@@ -1,13 +1,14 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { auth } from '../firebase'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
+import React, { useState } from 'react'
+import { sendPasswordResetEmail } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
-import firebase from 'firebase/app';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import 'firebase/auth';
+// Import des éléments internes à l'application
+
 import { globalStyles } from '../styles/global';
 import { Colors } from '../styles/colors';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { auth } from '../../../firebase'
 
 
 

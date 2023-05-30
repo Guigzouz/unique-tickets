@@ -1,9 +1,8 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { auth, db } from '../../firebase'
-import { signOut } from 'firebase/auth'
+import { StyleSheet, Text, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import * as SecureStore from 'expo-secure-store';
+import React from 'react'
+// Import des éléments internes à l'application
+
 import { globalStyles } from '../../styles/global'
 import { Colors } from '../../styles/colors'
 import PreviousEvents from '../../components/PreviousEvents'

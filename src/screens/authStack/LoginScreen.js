@@ -1,13 +1,11 @@
 import { KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { auth } from '../firebase'
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigation } from '@react-navigation/native'
-import { globalStyles } from '../styles/global'
-import { Colors } from '../styles/colors'
-import * as SecureStore from 'expo-secure-store';
-import useAuthStore from '../store/AuthStore';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+// Import des éléments internes à l'application
+import { globalStyles } from '../../styles/global'
+import { Colors } from '../../styles/colors'
+import useAuthStore from '../../services/AuthStore';
 
 
 
@@ -43,7 +41,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
       style={globalStyles.container}
       behavior="padding">
       
-      <Image style={globalStyles.logo} source= {require('../assets/logo/logo.png')}></Image>
+      <Image style={globalStyles.logo} source= {require('../../../assets/logo/logo.png')}></Image>
 
 
       <View style={globalStyles.textView}>

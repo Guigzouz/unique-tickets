@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
-import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
-import ProfileScreen from './screens/logged/ProfileScreen';
-import CustomHeader from './components/CustomHeader';
-import useAuthStore from './store/AuthStore';
-import MainTabNavigator from './components/MainTabNavigator';
-import Event from './screens/singles/Event';
-import EditProfile from './screens/logged/EditProfile';
+import { useEffect } from 'react';
+// Import des éléments internes à l'application
+import LoginScreen from './src/screens/authStack/LoginScreen';
+import ForgotPasswordScreen from './src/screens/authStack/LoginScreen';
+import RegisterScreen from './src/screens/authStack/LoginScreen';
+import CustomHeader from './src/navigation/CustomHeader';
+import useAuthStore from './src/services/AuthStore';
+import MainTabNavigator from './src/navigation/MainTabNavigator';
+import Event from './src/screens/singles/Event';
+import EditProfile from './src/screens/loggedStack/EditProfile';
 
+import ProfileScreen from './src/screens/loggedStack/ProfileScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +51,6 @@ export default function App() {
           <Stack.Screen options={{headerShown : false}} name="Login" component={LoginScreen} />
           <Stack.Screen options={{headerShown : true}} name="Register" component={RegisterScreen} />
           <Stack.Screen options={{headerShown : true}} name="ForgotPassword" component={ForgotPasswordScreen}/>
-          <Stack.Screen options={{headerShown : false}} name="Home" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

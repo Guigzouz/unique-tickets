@@ -1,5 +1,5 @@
 import { Image, View, ActivityIndicator, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../../firebase';
 import { getDoc, doc } from 'firebase/firestore';
 import { globalStyles } from '../../styles/global';
 import { useEffect, useState } from 'react';

@@ -1,14 +1,14 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { auth, db } from '../../firebase';
-import { signOut } from 'firebase/auth';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
+// Import des éléments internes à l'application
+
+import { auth, db } from '../../../firebase';
 import { globalStyles } from '../../styles/global';
 import { Colors } from '../../styles/colors';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import PreviousEvents from '../../components/PreviousEvents';
-import useAuthStore from '../../store/AuthStore';
+import useAuthStore from '../../services/AuthStore';
 
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import { globalStyles } from '../styles/global';
 import { Colors } from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -14,14 +13,14 @@ const CustomHeader = () => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.arrow}>
           <Icon name="arrow-back" size={30} color={Colors.primaryPurple} />
         </TouchableOpacity>
-        <Image style={styles.image} source={require('../assets/logo/logo.png')} />
+        <Image style={styles.image} source={require('../../assets/logo/logo.png')} />
       </View>
     );
   }
   
   return (
     <View style={styles.header}>
-      <Image style={styles.image} source={require('../assets/logo/logo.png')} />
+      <Image style={styles.image} source={require('../../assets/logo/logo.png')} />
     </View>
   );
 };
