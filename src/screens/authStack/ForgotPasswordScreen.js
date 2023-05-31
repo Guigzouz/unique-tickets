@@ -6,8 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import 'firebase/auth';
 // Import des éléments internes à l'application
 
-import { globalStyles } from '../styles/global';
-import { Colors } from '../styles/colors';
+import { globalStyles } from '../../styles/global';
+import { Colors } from '../../styles/colors';
 import { auth } from '../../../firebase'
 
 
@@ -33,7 +33,7 @@ const ForgotPasswordScreen = () => {
       style={globalStyles.container}
       behavior="padding">
 
-      <Image style={globalStyles.logo} source= {require('../assets/logo/logo.png')}></Image>
+      <Image style={globalStyles.logo} source= {require('../../../assets/logo/logo.png')}></Image>
 
 
       <View style={globalStyles.textView}>

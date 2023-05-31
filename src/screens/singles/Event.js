@@ -7,6 +7,7 @@ import { Colors } from '../../styles/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import React, { useCallback, useRef, useMemo } from "react";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheetComponent from '../../components/BottomSheetComponent';
 
 const Event = ({ route, navigation }) => {
   const { eventId } = route.params;
@@ -19,7 +20,9 @@ const Event = ({ route, navigation }) => {
   const sheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = useMemo(() => ["90%"], []);
+  const renderBottomSheetContent = useCallback(() => <BottomSheetComponent />, []);
 
+  
   async function takeTicket(userId, eventId) {
     const junctionRef = db.doc(`junction_users_events/${userId}_${eventId}`);
     await junctionRef.set({ userId, eventId });
@@ -81,13 +84,7 @@ const Event = ({ route, navigation }) => {
     return formattedDate;
   };
 
-  const renderBottomSheetContent = useCallback(() => (
-    <BottomSheetScrollView contentContainerStyle={singleStyles.contentContainer}>
-      <Text>Hello!</Text>
-      <Text>Hello!</Text>
-      <Text>Hello!</Text>
-    </BottomSheetScrollView>
-  ), []);
+
 
   if (loading) {
     return (
@@ -167,14 +164,16 @@ const Event = ({ route, navigation }) => {
       <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoints}
+        index={isOpen ? 0 : -1} // Utilisez la valeur d'isOpen pour contrôler l'état d'ouverture
         enablePanDownToClose={true}
         onClose={() => setIsOpen(false)}
+        cursorHandle={singleStyles.cursorHandle}
         backgroundComponent={({ style }) => (
-          <View style={[style, { backgroundColor: 'white' }]} />
+          <View style={[style, { backgroundColor: Colors.secondaryDark }]} />
         )}
         style={globalStyles.container}
       >
-        {renderBottomSheetContent()}
+        <BottomSheetComponent docSnap={docSnap} formatDate={formatDate} ticketCounts={ticketCounts} ticketCategories={ticketCategories} />
       </BottomSheet>
     </View>
   );
@@ -275,4 +274,8 @@ const singleStyles = StyleSheet.create({
   contentContainer: {
     backgroundColor: "white",
   },
+  cursorHandle: {
+    backgroundColor: Colors.primaryLight, // customize the cursor handle color
+
+  }
 });

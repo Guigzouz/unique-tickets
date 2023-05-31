@@ -5,8 +5,8 @@ import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 // Import des éléments internes à l'application
 import LoginScreen from './src/screens/authStack/LoginScreen';
-import ForgotPasswordScreen from './src/screens/authStack/LoginScreen';
-import RegisterScreen from './src/screens/authStack/LoginScreen';
+import ForgotPasswordScreen from './src/screens/authStack/ForgotPasswordScreen';
+import RegisterScreen from './src/screens/authStack/RegisterScreen';
 import CustomHeader from './src/navigation/CustomHeader';
 import useAuthStore from './src/services/AuthStore';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
