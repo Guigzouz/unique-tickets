@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
+
 import { globalStyles } from '../styles/global';
 import { Colors } from '../styles/colors';
 
-const PaymentForm = () => {
+const PaymentForm = ({ addTicketToFirebase, userId, eventId,}) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [name, setName] = useState('');
+
+
 
   const handleSubmit = () => {
     if (cardNumber === '' || expiryDate === '' || cvv === '' || name === '') {
@@ -17,6 +20,8 @@ const PaymentForm = () => {
     } else {
       // Logique de traitement du formulaire de paiement
       console.log('Carte bleue soumise : ', { cardNumber, expiryDate, cvv, name });
+      addTicketToFirebase(userId, eventId);
+
     }
   };
 
@@ -31,13 +36,13 @@ const PaymentForm = () => {
           placeholderTextColor={Colors.primaryLight}
         />
         <View style={paymentStyles.inlineInputContainer}>
-            <TextInput
-              style={[globalStyles.input, paymentStyles.inlineInput]}
-              placeholder="CVV"
-              onChangeText={setCvv}
-              value={cvv}
-              placeholderTextColor={Colors.primaryLight}
-            />
+          <TextInput
+            style={[globalStyles.input, paymentStyles.inlineInput]}
+            placeholder="CVV"
+            onChangeText={setCvv}
+            value={cvv}
+            placeholderTextColor={Colors.primaryLight}
+          />
           <TextInput
             style={[globalStyles.input, paymentStyles.inlineInput]}
             placeholder="Péremption"

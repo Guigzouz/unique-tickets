@@ -4,14 +4,44 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { globalStyles } from "../styles/global";
 import { Colors } from "../styles/colors";
 import PaymentForm from "./PaymentForm";
+import { auth } from "../../firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
+import { db } from "../../firebase";
 
 
-const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategories }) => {
-
+const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategories, eventId }) => {
+    const userId = auth.currentUser?.uid;
     // Filtrage des catégories de tickets, exclure celles avec 0 tickets sélectionnés
     const selectedTicketCategories = ticketCategories.filter(
       (category) => ticketCounts[category.categoryName] > 0
     );
+    
+  // Ajouter le ticket à la collection "tickets"
+  const addTicketToFirebase = async (userId, eventId) => {
+    try {
+      
+      for (const category in ticketCounts) {
+        const count = ticketCounts[category];
+        const categoryObj = ticketCategories.find((cat) => cat.categoryName === category);
+        if (categoryObj && count > 0) {
+          for (let i = 0; i < count; i++) {
+            const ticket = {
+              userId,
+              eventId,
+              category: categoryObj.categoryName,
+              price: categoryObj.price,
+            };
+            await db.collection('tickets').add(ticket);
+          }
+        }
+      }
+      
+      console.log('Tickets ajoutés avec succès !');
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout des tickets :', error);
+    }
+  };
 
     const calculateTotal = (ticketCounts, ticketCategories) => {
       let total = 0;
@@ -67,7 +97,7 @@ const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategor
       </View>
       <KeyboardAvoidingView style={singleStyles.title}>
       <Text style={globalStyles.nusarTitle}>Mode de paiement</Text>
-      <PaymentForm />
+      <PaymentForm addTicketToFirebase={addTicketToFirebase} userId={userId} eventId={eventId}/>
 
       </KeyboardAvoidingView>
       
