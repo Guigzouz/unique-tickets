@@ -4,9 +4,9 @@ import { globalStyles } from '../styles/global';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // Import des éléments internes à l'application
-import TicketScreen from '../screens/loggedStack/TicketScreen';
 import SearchScreen from '../screens/loggedStack/SearchScreen';
 import MyTickets from '../screens/loggedStack/MyTickets';
+import ProfileScreen from '../screens/loggedStack/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -65,7 +65,7 @@ function MainTabNavigator() {
       <Tab.Screen
         name="Profil"
         options={{ headerShown: false }}
-        component={TicketScreen}
+        component={ProfileScreen}
       />
     </Tab.Navigator>
   );

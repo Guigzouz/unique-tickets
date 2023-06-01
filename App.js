@@ -11,9 +11,9 @@ import CustomHeader from './src/navigation/CustomHeader';
 import useAuthStore from './src/services/AuthStore';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import Event from './src/screens/singles/Event';
+import EventSeen from './src/screens/singles/EventSeen';
 import EditProfile from './src/screens/loggedStack/EditProfile';
 
-import ProfileScreen from './src/screens/loggedStack/ProfileScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -62,6 +62,7 @@ export default function App() {
     <Stack.Navigator screenOptions={{header: CustomHeader}}>
         <Stack.Screen name="MainTab" component={MainTabNavigator} />
         <Stack.Screen name="Event" component={Event} />
+        <Stack.Screen name="EventSeen" component={EventSeen} />
         <Stack.Screen name="Edit" component={EditProfile} />
     </Stack.Navigator>
   </NavigationContainer>

@@ -23,15 +23,15 @@ const PreviousEvents = ({ navigation }) => {
   }, []);
 
   const fetchEvents = async (userId) => {
-    const junctions = await db
-      .collection('junction_users_events')
+    const tickets = await db
+      .collection('tickets')
       .where('userId', '==', userId)
       .get();
 
+    const eventIds = tickets.docs.map((doc) => doc.data().eventId);
+
     const events = await Promise.all(
-      junctions.docs
-        .filter((doc) => doc.exists)
-        .map((doc) => db.doc(`events/${doc.data().eventId}`).get())
+      eventIds.map((eventId) => db.doc(`events/${eventId}`).get())
     );
 
     return events
@@ -68,7 +68,7 @@ const PreviousEvents = ({ navigation }) => {
       {events.map((event) => (
         <TouchableOpacity
           key={event.id}
-          onPress={() => navigation.navigate('Event', { eventId: event.id })}
+          onPress={() => navigation.navigate('EventSeen', { eventId: event.id })}
           style={eventStyles.post}
         >
           <Image source={{ uri: event.image }} style={eventStyles.image} />
@@ -80,7 +80,6 @@ const PreviousEvents = ({ navigation }) => {
           <Text style={eventStyles.secondaryText}>
             {formatDate(event.date.seconds)}
           </Text>
-          <Text style={eventStyles.price}>à partir de {event.startingPrice} €</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
