@@ -1,11 +1,8 @@
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { auth, db } from '../../firebase'
-import { signOut } from 'firebase/auth'
-import { useNavigation } from '@react-navigation/native'
-import * as SecureStore from 'expo-secure-store';
-import { globalStyles } from '../styles/global'
-import { Colors } from '../styles/colors'
+import { FieldPath, auth, db } from '../../firebase'
+import { Colors } from '../styles/colors';
+
 
 const PreviousEvents = ({ navigation }) => {
   const [events, setEvents] = useState([]);
@@ -23,21 +20,42 @@ const PreviousEvents = ({ navigation }) => {
   }, []);
 
   const fetchEvents = async (userId) => {
-    const tickets = await db
+    const ticketsSnapshot = await db
       .collection('tickets')
       .where('userId', '==', userId)
       .get();
-
-    const eventIds = tickets.docs.map((doc) => doc.data().eventId);
-
-    const events = await Promise.all(
-      eventIds.map((eventId) => db.doc(`events/${eventId}`).get())
-    );
-
-    return events
-      .filter((doc) => doc.exists)
-      .map((doc) => ({ id: doc.id, ...doc.data() }));
+  
+    const tickets = ticketsSnapshot.docs.map((doc) => doc.data());
+    const eventIds = tickets.map((ticket) => ticket.eventId);
+    console.log('Event IDs:', eventIds);
+  
+    const eventsSnapshot = await db
+      .collection('events')
+      .where(FieldPath.documentId(), 'in', eventIds)
+      .get();
+  
+    const events = eventsSnapshot.docs.map((doc) => {
+      const eventId = doc.id;
+      const eventTicket = tickets.filter((ticket) => ticket.eventId === eventId);
+      const category = eventTicket[0].category;
+      const price = eventTicket[0].price;
+  
+      return {
+        id: eventId,
+        category,
+        price,
+        count: eventTicket.length, // Add count property to store the ticket count
+        tickets: eventTicket, // Add tickets property with the event tickets
+        ...doc.data(),
+      };
+    });
+  
+    return events;
   };
+  
+  
+  
+  
 
   const formatDate = (timestamp) => {
     const dateObject = new Date(timestamp * 1000);
@@ -58,6 +76,9 @@ const PreviousEvents = ({ navigation }) => {
       });
   };
 
+  console.log('Events:', events);
+
+
   return (
     <ScrollView
       contentContainerStyle={eventStyles.container}
@@ -66,9 +87,10 @@ const PreviousEvents = ({ navigation }) => {
       }
     >
       {events.map((event) => (
+        
         <TouchableOpacity
           key={event.id}
-          onPress={() => navigation.navigate('EventSeen', { eventId: event.id })}
+          onPress={() => navigation.navigate('EventSeen', { event, ticket:event.ticket })}
           style={eventStyles.post}
         >
           <Image source={{ uri: event.image }} style={eventStyles.image} />
@@ -80,10 +102,15 @@ const PreviousEvents = ({ navigation }) => {
           <Text style={eventStyles.secondaryText}>
             {formatDate(event.date.seconds)}
           </Text>
+          <Text style={eventStyles.title}>
+            Tickets: {event.count}
+          </Text>
+
         </TouchableOpacity>
       ))}
     </ScrollView>
   );
+  
 };
 
 export default PreviousEvents;

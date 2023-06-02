@@ -10,7 +10,7 @@ import "firebase/firestore";
 import { db } from "../../firebase";
 
 
-const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategories, eventId }) => {
+const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategories, eventId, navigation }) => {
     const userId = auth.currentUser?.uid;
     // Filtrage des catégories de tickets, exclure celles avec 0 tickets sélectionnés
     const selectedTicketCategories = ticketCategories.filter(
@@ -97,7 +97,7 @@ const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategor
       </View>
       <KeyboardAvoidingView style={singleStyles.title}>
       <Text style={globalStyles.nusarTitle}>Mode de paiement</Text>
-      <PaymentForm addTicketToFirebase={addTicketToFirebase} userId={userId} eventId={eventId}/>
+      <PaymentForm addTicketToFirebase={addTicketToFirebase} userId={userId} eventId={eventId} navigation={navigation}/>
 
       </KeyboardAvoidingView>
       

@@ -173,7 +173,7 @@ const Event = ({ route, navigation }) => {
         )}
         style={globalStyles.container}
       >
-        <BottomSheetComponent docSnap={docSnap} formatDate={formatDate} ticketCounts={ticketCounts} ticketCategories={ticketCategories} eventId={eventId}/>
+        <BottomSheetComponent docSnap={docSnap} formatDate={formatDate} ticketCounts={ticketCounts} ticketCategories={ticketCategories} eventId={eventId} navigation={navigation}/>
       </BottomSheet>
     </View>
   );

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { globalStyles } from '../styles/global';
 import { Colors } from '../styles/colors';
 
-const PaymentForm = ({ addTicketToFirebase, userId, eventId,}) => {
+const PaymentForm = ({ addTicketToFirebase, userId, eventId, navigation}) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -21,6 +21,7 @@ const PaymentForm = ({ addTicketToFirebase, userId, eventId,}) => {
       // Logique de traitement du formulaire de paiement
       console.log('Carte bleue soumise : ', { cardNumber, expiryDate, cvv, name });
       addTicketToFirebase(userId, eventId);
+      navigation.navigate('PaymentSuccess')
 
     }
   };

@@ -13,6 +13,7 @@ import MainTabNavigator from './src/navigation/MainTabNavigator';
 import Event from './src/screens/singles/Event';
 import EventSeen from './src/screens/singles/EventSeen';
 import EditProfile from './src/screens/loggedStack/EditProfile';
+import PaymentSuccess from './src/screens/singles/PaymentSuccess';
 
 
 
@@ -63,6 +64,7 @@ export default function App() {
         <Stack.Screen name="MainTab" component={MainTabNavigator} />
         <Stack.Screen name="Event" component={Event} />
         <Stack.Screen name="EventSeen" component={EventSeen} />
+        <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
         <Stack.Screen name="Edit" component={EditProfile} />
     </Stack.Navigator>
   </NavigationContainer>

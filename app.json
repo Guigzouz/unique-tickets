@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "unique-tickets",
-    "slug": "unique-tickets",
+    "name": "Unique Ticket",
+    "slug": "unique-ticket",
+    "description":"Unique Ticket est un service d'achat/revente sécurisé de Tickets d'évènements.",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

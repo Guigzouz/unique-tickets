@@ -28,6 +28,7 @@ if (firebase.apps.length === 0) {
 
 const db = firebase.firestore();
 const auth = getAuth();
+const FieldPath = firebase.firestore.FieldPath;
 
 
-export { auth, db };
+export { auth, db, FieldPath };
