@@ -4,6 +4,7 @@ import { Colors } from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useTicketStore from '../services/TicketStore';
+import { auth, db } from '../../firebase';
 
 const CustomHeader = () => {
   const navigation = useNavigation();
@@ -13,8 +14,57 @@ const CustomHeader = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const { selectedCounts } = useTicketStore();
 
+  const confirmSellTickets = () => {
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr de vouloir revendre les billets sélectionnés ?',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Confirmer',
+          onPress: () => sellTickets(),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
-  // openMenu verifie si le store TicketStore a des clés (des tickets séléctionnés)
+  const sellTickets = async () => {
+    try {
+      const userId = auth.currentUser.uid;
+  
+      // Récupérer les IDs des tickets à supprimer
+      const ticketIds = [];
+      const userTicketsRef = db.collection('tickets').where('userId', '==', userId);
+      const querySnapshot = await userTicketsRef.get();
+      querySnapshot.forEach((doc) => {
+        const ticketData = doc.data();
+        if (
+          ticketData.eventId === 'TtTqBgKZ0O5h3fGDQMfq' && // ID de l'événement spécifique
+          ticketData.category === 'Backstage' // Catégorie du ticket spécifique
+        ) {
+          ticketIds.push(doc.id);
+        }
+      });
+  
+      // Supprimer les tickets correspondants
+      const batch = db.batch();
+      ticketIds.forEach((ticketId) => {
+        const ticketRef = db.collection('tickets').doc(ticketId);
+        batch.delete(ticketRef);
+      });
+      await batch.commit();
+  
+      console.log('Les billets ont été supprimés avec succès.');
+    } catch (error) {
+      console.error('Erreur lors de la suppression des billets :', error);
+    }
+  };
+  
+
   const openMenu = () => {
     if (Object.keys(selectedCounts).length > 0) {
       setMenuVisible(true);
@@ -22,7 +72,6 @@ const CustomHeader = () => {
       Alert.alert("Aucun ticket n'a été sélectionné");
     }
   };
-  
 
   const closeMenu = () => {
     setMenuVisible(false);
@@ -30,19 +79,15 @@ const CustomHeader = () => {
 
   const handleMenuOption = (option) => {
     console.log('Selected option:', option);
-    if (Object.keys(selectedCounts).length === 0) {
-      // Aucun ticket n'a été sélectionné
-      alert("Aucun ticket n'a été sélectionné");
-      return;
+    if (option === 'Revendre Billet(s)') {
+      confirmSellTickets();
+    } else if (option === 'Transferer Billet(s)') {
+      // Inserer Logique pour transférer les billets
+    } else if (option === 'Imprimer Billet(s)') {
+      // Inserer Logique pour imprimer les billets
     }
-  
   };
-  
 
-  const handleTicketSelection = () => {
-    // Logique pour la sélection du ticket
-    
-  };
 
   if (navigation && navigation.canGoBack()) {
     return (
@@ -59,18 +104,20 @@ const CustomHeader = () => {
 
         <Modal visible={menuVisible} animationType="slide" transparent={true}>
           <View style={styles.menuContainer}>
-            <TouchableOpacity style={styles.menuOption} onPress={() => handleMenuOption('Revendre Billet(s)')}>
-              <Text style={styles.menuText}>Revendre Billet(s)</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuOption} onPress={() => handleMenuOption('Transferer Billet(s)')}>
-              <Text style={styles.menuText}>Transferer Billet(s)</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuOption} onPress={() => handleMenuOption('Imprimer Billet(s)')}>
-              <Text style={styles.menuText}>Imprimer Billet(s)</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={closeMenu}>
-              <Text style={styles.closeButtonText}>Fermer</Text>
-            </TouchableOpacity>
+            <View style={styles.menuOptions}>
+              <TouchableOpacity style={styles.menuOption} onPress={() => handleMenuOption('Revendre Billet(s)')}>
+                <Text style={styles.menuText}>Revendre Billet(s)</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuOption} onPress={() => handleMenuOption('Transferer Billet(s)')}>
+                <Text style={styles.menuText}>Transferer Billet(s)</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuOption} onPress={() => handleMenuOption('Imprimer Billet(s)')}>
+                <Text style={styles.menuText}>Imprimer Billet(s)</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={closeMenu}>
+                <Text style={styles.closeButtonText}>Fermer</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
       </View>
@@ -124,25 +171,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  menuOptions: {
+    paddingHorizontal: 50,
+    paddingVertical: 30,
+    borderRadius: 15,
+    backgroundColor: Colors.primaryDark,
+    borderColor: Colors.primaryPurple,
+    borderWidth: 1,
+  },
   menuOption: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.primaryPurple,
+    borderBottomColor: Colors.secondaryDark,
   },
   menuText: {
     fontSize: 18,
-    color: Colors.primaryPurple,
+    color: Colors.primaryLight,
   },
   closeButton: {
-    marginTop: 20,
+    marginTop: 30,
+    alignItems: 'center',
   },
   closeButtonText: {
-    fontSize: 18,
-    color: Colors.primaryPurple,
+    fontSize: 16,
+    color: Colors.primaryLight,
+    fontFamily: 'Montserrat-Bold',
   },
-  Modal:{
+  Modal: {
     width: '44%',
-    alignItems: 'flex-end'
-  }
+    alignItems: 'flex-end',
+  },
 });
