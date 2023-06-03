@@ -72,6 +72,7 @@ const EventSeen = ({ route }) => {
       );
     }
   };
+  
 
   const handleTicketDeselection = (category) => {
     const selectedCount = selectedCounts[category] || 0;

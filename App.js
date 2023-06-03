@@ -44,30 +44,31 @@ export default function App() {
   }
 
 
+
   if (!user) {
-    // Render your login screen.
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{header: CustomHeader}}>
-          <Stack.Screen options={{headerShown : false}} name="Login" component={LoginScreen} />
-          <Stack.Screen options={{headerShown : true}} name="Register" component={RegisterScreen} />
-          <Stack.Screen options={{headerShown : true}} name="ForgotPassword" component={ForgotPasswordScreen}/>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 
-  // Render your app.
   return (
-  <NavigationContainer>
-    <Stack.Navigator screenOptions={{header: CustomHeader}}>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="MainTab"
+        screenOptions={{ header: (props) => <CustomHeader {...props} /> }}
+      >
         <Stack.Screen name="MainTab" component={MainTabNavigator} />
         <Stack.Screen name="Event" component={Event} />
         <Stack.Screen name="EventSeen" component={EventSeen} />
         <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
         <Stack.Screen name="Edit" component={EditProfile} />
-    </Stack.Navigator>
-  </NavigationContainer>
-
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
