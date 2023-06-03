@@ -3,22 +3,26 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Modal, Alert } from 'r
 import { Colors } from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import useTicketStore from '../services/TicketStore';
 
 const CustomHeader = () => {
   const navigation = useNavigation();
   const route = useRoute();
-
   const isEventSeenScreen = route.name === 'EventSeen';
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [ticketSelected, setTicketSelected] = useState(false);
 
+  const [menuVisible, setMenuVisible] = useState(false);
+  const { selectedCounts } = useTicketStore();
+
+
+  // openMenu verifie si le store TicketStore a des clés (des tickets séléctionnés)
   const openMenu = () => {
-    if (ticketSelected) {
+    if (Object.keys(selectedCounts).length > 0) {
       setMenuVisible(true);
     } else {
       Alert.alert("Aucun ticket n'a été sélectionné");
     }
   };
+  
 
   const closeMenu = () => {
     setMenuVisible(false);
@@ -26,25 +30,18 @@ const CustomHeader = () => {
 
   const handleMenuOption = (option) => {
     console.log('Selected option:', option);
-    // Vérifier si des tickets ont été sélectionnés dans la page EventSeen
-    if (route.name === 'EventSeen' && Object.keys(selectedCounts).length === 0) {
-      Alert.alert(
-        'Aucun ticket sélectionné',
-        'Veuillez sélectionner au moins un ticket avant de continuer.',
-        [
-          { text: 'OK' }
-        ]
-      );
+    if (Object.keys(selectedCounts).length === 0) {
+      // Aucun ticket n'a été sélectionné
+      alert("Aucun ticket n'a été sélectionné");
       return;
     }
   
-    // Ajoutez le reste de votre logique pour chaque option de menu ici
   };
   
 
   const handleTicketSelection = () => {
     // Logique pour la sélection du ticket
-    setTicketSelected(true);
+    
   };
 
   if (navigation && navigation.canGoBack()) {

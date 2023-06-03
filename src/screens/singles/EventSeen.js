@@ -5,6 +5,8 @@ import { globalStyles } from '../../styles/global';
 import { Colors } from '../../styles/colors';
 import { db } from '../../../firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import useTicketStore from '../../services/TicketStore';
+
 
 
 const EventSeen = ({ route }) => {
@@ -15,7 +17,7 @@ const EventSeen = ({ route }) => {
   const [docSnap, setDocSnap] = useState(null);
   const [loading, setLoading] = useState(true);
   const [ticketCounts, setTicketCounts] = useState({});
-  const [selectedCounts, setSelectedCounts] = useState({});
+  const { selectedCounts, setSelectedCounts } = useTicketStore();
 
   useEffect(() => {
     const getCollectionData = async () => {
