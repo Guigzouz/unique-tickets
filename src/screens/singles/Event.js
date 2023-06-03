@@ -20,7 +20,6 @@ const Event = ({ route, navigation }) => {
   const sheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = useMemo(() => ["90%"], []);
-  const renderBottomSheetContent = useCallback(() => <BottomSheetComponent />, []);
 
   
   async function takeTicket(userId, eventId) {

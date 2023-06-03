@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { FieldPath, auth, db } from '../../firebase'
 import { Colors } from '../styles/colors';
 
-
 const PreviousEvents = ({ navigation }) => {
   const [events, setEvents] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -14,7 +13,6 @@ const PreviousEvents = ({ navigation }) => {
         setEvents(events);
       })
       .catch((error) => {
-        // Gérer les erreurs lors de la récupération des billets
         console.error(error);
       });
   }, []);
@@ -24,38 +22,34 @@ const PreviousEvents = ({ navigation }) => {
       .collection('tickets')
       .where('userId', '==', userId)
       .get();
-  
+
     const tickets = ticketsSnapshot.docs.map((doc) => doc.data());
     const eventIds = tickets.map((ticket) => ticket.eventId);
     console.log('Event IDs:', eventIds);
-  
+
     const eventsSnapshot = await db
       .collection('events')
       .where(FieldPath.documentId(), 'in', eventIds)
       .get();
-  
+
     const events = eventsSnapshot.docs.map((doc) => {
       const eventId = doc.id;
       const eventTicket = tickets.filter((ticket) => ticket.eventId === eventId);
       const category = eventTicket[0].category;
       const price = eventTicket[0].price;
-  
+
       return {
         id: eventId,
         category,
         price,
-        count: eventTicket.length, // Add count property to store the ticket count
-        tickets: eventTicket, // Add tickets property with the event tickets
+        count: eventTicket.length,
+        tickets: eventTicket,
         ...doc.data(),
       };
     });
-  
+
     return events;
   };
-  
-  
-  
-  
 
   const formatDate = (timestamp) => {
     const dateObject = new Date(timestamp * 1000);
@@ -78,7 +72,6 @@ const PreviousEvents = ({ navigation }) => {
 
   console.log('Events:', events);
 
-
   return (
     <ScrollView
       contentContainerStyle={eventStyles.container}
@@ -87,10 +80,9 @@ const PreviousEvents = ({ navigation }) => {
       }
     >
       {events.map((event) => (
-        
         <TouchableOpacity
           key={event.id}
-          onPress={() => navigation.navigate('EventSeen', { event, ticket:event.ticket })}
+          onPress={() => navigation.navigate('EventSeen', { event, ticket: event.tickets })}
           style={eventStyles.post}
         >
           <Image source={{ uri: event.image }} style={eventStyles.image} />
@@ -99,18 +91,12 @@ const PreviousEvents = ({ navigation }) => {
           <Text style={eventStyles.secondaryText}>
             {event.city} - {event.salle}
           </Text>
-          <Text style={eventStyles.secondaryText}>
-            {formatDate(event.date.seconds)}
-          </Text>
-          <Text style={eventStyles.title}>
-            Tickets: {event.count}
-          </Text>
-
+          <Text style={eventStyles.secondaryText}>{formatDate(event.date.seconds)}</Text>
+          <Text style={eventStyles.title}>Tickets: {event.count}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
   );
-  
 };
 
 export default PreviousEvents;
