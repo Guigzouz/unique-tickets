@@ -97,7 +97,16 @@ const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategor
       </View>
       <KeyboardAvoidingView style={singleStyles.title}>
       <Text style={globalStyles.nusarTitle}>Mode de paiement</Text>
-      <PaymentForm addTicketToFirebase={addTicketToFirebase} userId={userId} eventId={eventId} navigation={navigation}/>
+      <PaymentForm 
+      addTicketToFirebase={addTicketToFirebase} 
+      userId={userId} 
+      eventId={eventId} 
+      navigation={navigation}
+      docSnap={docSnap}
+      formatDate={formatDate} 
+      ticketcounts={ticketCounts}
+      ticketCategories={ticketCategories}
+      />
 
       </KeyboardAvoidingView>
       

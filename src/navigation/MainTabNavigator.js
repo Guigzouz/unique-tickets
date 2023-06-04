@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 function MainTabNavigator() {
   return (
     <Tab.Navigator
-      initialRouteName='MainTab'
+      initialRouteName="Fil d'actu"
       screenOptions={({ route }) => ({
         tabBarStyle: {
           position: 'absolute',

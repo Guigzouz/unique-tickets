@@ -58,8 +58,12 @@ const CustomHeader = () => {
         });
       }
   
+      setMenuVisible(false);
+      navigation.goBack();
+      Alert.alert('Succès', 'Vous pouvez rafraichir votre liste')
       useTicketStore.getState().resetSelectedCounts();
       console.log('Les tickets ont été supprimés avec succès.');
+
     } catch (error) {
       console.error('Erreur lors de la suppression des tickets :', error);
     }
@@ -99,7 +103,7 @@ const CustomHeader = () => {
         <Image style={styles.image} source={require('../../assets/logo/logo.png')} />
         {isEventSeenScreen && (
           <TouchableOpacity onPress={openMenu} style={styles.Modal}>
-            <Icon name="menu" size={30} color={Colors.primaryPurple} />
+        <Image style={styles.image} source={require('../../assets/logo/resell.png')} />
           </TouchableOpacity>
         )}
 

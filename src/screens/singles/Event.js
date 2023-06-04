@@ -21,39 +21,17 @@ const Event = ({ route, navigation }) => {
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = useMemo(() => ["90%"], []);
 
-  
-  async function takeTicket(userId, eventId) {
-    const junctionRef = db.doc(`junction_users_events/${userId}_${eventId}`);
-    await junctionRef.set({ userId, eventId });
-    alert("Votre billet a été réservé");
-  }
-
-
   const handleSnapPress = useCallback((index) => {
     sheetRef.current?.snapToIndex(index);
     setIsOpen(true);
 
   })
 
-  const handleReservation = async () => {
-    const userId = auth.currentUser?.uid;
-    console.log("user id :", userId);
-    console.log("event id :", eventId);
+  const isOpenClosing = useCallback((index) => {
+    // sheetRef.current?.snapToIndex(index);
+    setIsOpen(false);
 
-    // Calcul du nombre total de tickets sélectionnés pour chaque catégorie
-    let totalTickets = 0;
-    for (const category in ticketCounts) {
-      totalTickets += ticketCounts[category];
-    }
-
-    console.log("Nombre total de tickets :", totalTickets);
-
-    // Effectuer les opérations souhaitées avec le nombre total de tickets
-
-    takeTicket(userId, eventId);
-    navigation.goBack();
-
-  };
+  })
 
 
 
@@ -172,7 +150,15 @@ const Event = ({ route, navigation }) => {
         )}
         style={globalStyles.container}
       >
-        <BottomSheetComponent docSnap={docSnap} formatDate={formatDate} ticketCounts={ticketCounts} ticketCategories={ticketCategories} eventId={eventId} navigation={navigation}/>
+        <BottomSheetComponent 
+        docSnap={docSnap} 
+        formatDate={formatDate} 
+        ticketCounts={ticketCounts} 
+        ticketCategories={ticketCategories} 
+        eventId={eventId} 
+        navigation={navigation} 
+        isOpenClosing={isOpenClosing}
+        />
       </BottomSheet>
     </View>
   );

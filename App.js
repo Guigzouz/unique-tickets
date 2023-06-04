@@ -48,8 +48,8 @@ export default function App() {
   if (!user) {
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Navigator screenOptions={{ header: (props) => <CustomHeader {...props} /> }}>
+          <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         </Stack.Navigator>

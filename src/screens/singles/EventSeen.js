@@ -67,14 +67,6 @@ const EventSeen = ({ route }) => {
       const updatedSelectedCounts = { ...selectedCounts };
       updatedSelectedCounts[category] = selectedCount + 1;
       setSelectedCounts(updatedSelectedCounts);
-    } else {
-      Alert.alert(
-        'Limite atteinte',
-        'Tu as déjà sélectionné tous tes tickets dans cette catégorie',
-        [
-          { text: 'OK' }
-        ]
-      );
     }
   };
   
@@ -90,13 +82,13 @@ const EventSeen = ({ route }) => {
 
   const handleViewProof = () => {
     Alert.alert(
-      'Redirection',
-      'Vous allez être redirigé vers votre preuve d\'achat',
+      'En construction',
+      'Une visionneuse de vos achats sera bientôt implémentée',
       [
         { text: 'OK' }
       ]
     );
-    // Ajoutez ici le code pour rediriger l'utilisateur vers la preuve d'achat
+    //code pour  la possible visionneuse PDF + QR Codes
   };
 
   if (loading) {
