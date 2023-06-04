@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useTicketStore from '../services/TicketStore';
 import { auth, db } from '../../firebase';
+import { deleteDoc, query, collection, where, getDocs, limit } from 'firebase/firestore';
 
 const CustomHeader = () => {
   const navigation = useNavigation();
@@ -12,7 +13,7 @@ const CustomHeader = () => {
   const isEventSeenScreen = route.name === 'EventSeen';
 
   const [menuVisible, setMenuVisible] = useState(false);
-  const { selectedCounts } = useTicketStore();
+  const { selectedCounts, eventId } = useTicketStore();
 
   const confirmSellTickets = () => {
     Alert.alert(
@@ -34,37 +35,38 @@ const CustomHeader = () => {
 
   const sellTickets = async () => {
     try {
-      const userId = auth.currentUser.uid;
+      const ticketsRef = collection(db, 'tickets');
+      const userId = auth.currentUser?.uid;
   
-      // Récupérer les IDs des tickets à supprimer
-      const ticketIds = [];
-      const userTicketsRef = db.collection('tickets').where('userId', '==', userId);
-      const querySnapshot = await userTicketsRef.get();
-      querySnapshot.forEach((doc) => {
-        const ticketData = doc.data();
-        if (
-          ticketData.eventId === 'TtTqBgKZ0O5h3fGDQMfq' && // ID de l'événement spécifique
-          ticketData.category === 'Backstage' // Catégorie du ticket spécifique
-        ) {
-          ticketIds.push(doc.id);
-        }
-      });
+      const selectedTickets = Object.entries(selectedCounts);
   
-      // Supprimer les tickets correspondants
-      const batch = db.batch();
-      ticketIds.forEach((ticketId) => {
-        const ticketRef = db.collection('tickets').doc(ticketId);
-        batch.delete(ticketRef);
-      });
-      await batch.commit();
+      for (let i = 0; i < selectedTickets.length; i++) {
+        const [category, count] = selectedTickets[i];
   
-      console.log('Les billets ont été supprimés avec succès.');
+        const categoryQuery = query(
+          ticketsRef,
+          where('eventId', '==', eventId),
+          where('userId', '==', userId),
+          where('category', '==', category),
+          limit(count) // Limite le nombre de documents à supprimer à "count"
+        );
+  
+        const categorySnapshot = await getDocs(categoryQuery);
+  
+        categorySnapshot.forEach(async (doc) => {
+          await deleteDoc(doc.ref);
+        });
+      }
+  
+      useTicketStore.getState().resetSelectedCounts();
+      console.log('Les tickets ont été supprimés avec succès.');
     } catch (error) {
-      console.error('Erreur lors de la suppression des billets :', error);
+      console.error('Erreur lors de la suppression des tickets :', error);
     }
   };
   
 
+  
   const openMenu = () => {
     if (Object.keys(selectedCounts).length > 0) {
       setMenuVisible(true);
@@ -82,12 +84,11 @@ const CustomHeader = () => {
     if (option === 'Revendre Billet(s)') {
       confirmSellTickets();
     } else if (option === 'Transferer Billet(s)') {
-      // Inserer Logique pour transférer les billets
+      // Insérer la logique pour transférer les billets
     } else if (option === 'Imprimer Billet(s)') {
-      // Inserer Logique pour imprimer les billets
+      // Insérer la logique pour imprimer les billets
     }
   };
-
 
   if (navigation && navigation.canGoBack()) {
     return (

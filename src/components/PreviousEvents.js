@@ -25,7 +25,7 @@ const PreviousEvents = ({ navigation }) => {
 
     const tickets = ticketsSnapshot.docs.map((doc) => doc.data());
     const eventIds = tickets.map((ticket) => ticket.eventId);
-    console.log('Event IDs:', eventIds);
+    // console.log('Event IDs:', eventIds);
 
     const eventsSnapshot = await db
       .collection('events')
@@ -70,7 +70,7 @@ const PreviousEvents = ({ navigation }) => {
       });
   };
 
-  console.log('Events:', events);
+  // console.log('Events:', events);
 
   return (
     <ScrollView

@@ -25,13 +25,15 @@ const EventSeen = ({ route }) => {
         const snapshot = await getDoc(docRef);
         setDocSnap(snapshot);
         setLoading(false);
+        useTicketStore.getState().setEventId(event.id); //définir l'eventId dans le store
       } catch (error) {
         console.log('Error fetching event:', error);
       }
     };
-
+  
     getCollectionData();
   }, []);
+  
 
   useEffect(() => {
     const countTickets = () => {
@@ -50,6 +52,7 @@ const EventSeen = ({ route }) => {
 
     countTickets();
   }, [tickets]);
+  
 
   const formatDate = (timestamp) => {
     const dateObject = new Date(timestamp * 1000);
