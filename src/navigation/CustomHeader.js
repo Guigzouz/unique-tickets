@@ -5,7 +5,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useTicketStore from '../services/TicketStore';
 import { auth, db } from '../../firebase';
-import { deleteDoc, query, collection, where, getDocs, limit } from 'firebase/firestore';
+import { query, collection, where, getDocs, limit } from 'firebase/firestore';
+import { deleteDoc } from 'firebase/firestore';
+
 
 const CustomHeader = () => {
   const navigation = useNavigation();
@@ -61,7 +63,6 @@ const CustomHeader = () => {
       setMenuVisible(false);
       navigation.goBack();
       Alert.alert('Succès', 'Vous pouvez rafraichir votre liste')
-      useTicketStore.getState().resetSelectedCounts();
       console.log('Les tickets ont été supprimés avec succès.');
 
     } catch (error) {
@@ -103,7 +104,7 @@ const CustomHeader = () => {
         <Image style={styles.image} source={require('../../assets/logo/logo.png')} />
         {isEventSeenScreen && (
           <TouchableOpacity onPress={openMenu} style={styles.Modal}>
-        <Image style={styles.image} source={require('../../assets/logo/resell.png')} />
+        <Image style={styles.imageResell} source={require('../../assets/logo/resell.png')} />
           </TouchableOpacity>
         )}
 
@@ -167,8 +168,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
+  imageResell:{
+    width: 40,
+    height: 40,
+    resizeMode: 'contain'
+  },
   arrow: {
-    width: '43%',
+    width: '42%',
   },
   menuContainer: {
     flex: 1,

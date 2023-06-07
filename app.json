@@ -2,8 +2,9 @@
   "expo": {
     "name": "Unique Ticket",
     "slug": "unique-ticket",
-    "description":"Unique Ticket est un service d'achat/revente sécurisé de Tickets d'évènements.",
-    "version": "1.0.0",
+    "description": "Unique Ticket est un service d'achat/revente sécurisé de Tickets d'évènements.",
+    "version": "1.0.1",
+    "privacy": "public",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,16 +17,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.guigzouz.uniqueticket"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.guigzouz.uniqueticket"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5010ed13-7bc7-4b1e-94a0-ec0649432318"
+      }
     }
   }
 }

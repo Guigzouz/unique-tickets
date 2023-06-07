@@ -27,6 +27,11 @@ const PreviousEvents = ({ navigation }) => {
     const eventIds = tickets.map((ticket) => ticket.eventId);
     // console.log('Event IDs:', eventIds);
 
+    if (eventIds.length === 0) {
+      // Handle the scenario when there are no events
+      return [];
+    }
+
     const eventsSnapshot = await db
       .collection('events')
       .where(FieldPath.documentId(), 'in', eventIds)
