@@ -2,10 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
 import { StyleSheet, Dimensions } from 'react-native';
-import Fuse from 'fuse.js';
-// Import des éléments internes à l'application
+import { fetchEvents } from '../../DAL/DAO_events';
 
-import { db } from '../../../firebase';
+// Import des éléments internes à l'application
 import { globalStyles } from '../../styles/global';
 import { Colors } from '../../styles/colors';
 import SearchBar from '../../components/SearchBar';
@@ -17,43 +16,11 @@ const SearchScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    fetchEvents();
+    fetchEvents(searchPhrase)
+      .then((data) => setEvents(data))
+      .catch((error) => console.log(error));
   }, [searchPhrase]);
 
-
-  // UTILISATION DE L'ALGORITHME FUZZY SEARCH POUR GERER LES FAUTES DE FRAPPE
-  const fetchEvents = async () => {
-    try {
-      let query = db.collection('events');
-  
-      if (searchPhrase !== "") {
-        const options = {
-          keys: ['title', 'artist', 'salle'], // Specify the fields to search in
-          includeScore: true, // Include score for each result
-          threshold: 0.4, // Adjust the threshold for fuzzy matching
-        };
-        
-        const fuse = new Fuse(events, options);
-        const searchResults = fuse.search(searchPhrase);
-  
-        // Extract the matched items from the search results
-        const data = searchResults.map((result) => result.item);
-        
-        setEvents(data);
-      } else {
-        // No search phrase provided, fetch all events
-        const querySnapshot = await query.get();
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setEvents(data);
-      }
-    } catch (error) {
-      console.log('Error fetching events:', error);
-    }
-  };
-  
   
 
   const formatDate = (timestamp) => {

@@ -1,6 +1,7 @@
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { FieldPath, auth, db } from '../../firebase'
+import { auth } from '../../firebase';
+import { fetchPreviousEvents } from '../DAL/DAO_events';
 import { Colors } from '../styles/colors';
 
 const PreviousEvents = ({ navigation }) => {
@@ -8,7 +9,7 @@ const PreviousEvents = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    fetchEvents(auth.currentUser.uid)
+    fetchPreviousEvents(auth.currentUser.uid)
       .then((events) => {
         setEvents(events);
       })
@@ -17,44 +18,6 @@ const PreviousEvents = ({ navigation }) => {
       });
   }, []);
 
-  const fetchEvents = async (userId) => {
-    const ticketsSnapshot = await db
-      .collection('tickets')
-      .where('userId', '==', userId)
-      .get();
-
-    const tickets = ticketsSnapshot.docs.map((doc) => doc.data());
-    const eventIds = tickets.map((ticket) => ticket.eventId);
-    // console.log('Event IDs:', eventIds);
-
-    if (eventIds.length === 0) {
-      // Handle the scenario when there are no events
-      return [];
-    }
-
-    const eventsSnapshot = await db
-      .collection('events')
-      .where(FieldPath.documentId(), 'in', eventIds)
-      .get();
-
-    const events = eventsSnapshot.docs.map((doc) => {
-      const eventId = doc.id;
-      const eventTicket = tickets.filter((ticket) => ticket.eventId === eventId);
-      const category = eventTicket[0].category;
-      const price = eventTicket[0].price;
-
-      return {
-        id: eventId,
-        category,
-        price,
-        count: eventTicket.length,
-        tickets: eventTicket,
-        ...doc.data(),
-      };
-    });
-
-    return events;
-  };
 
   const formatDate = (timestamp) => {
     const dateObject = new Date(timestamp * 1000);
@@ -64,7 +27,7 @@ const PreviousEvents = ({ navigation }) => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    fetchEvents(auth.currentUser.uid)
+    fetchPreviousEvents(auth.currentUser.uid)
       .then((events) => {
         setEvents(events);
         setRefreshing(false);

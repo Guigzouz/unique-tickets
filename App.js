@@ -12,7 +12,7 @@ import useAuthStore from './src/services/AuthStore';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import Event from './src/screens/singles/Event';
 import EventSeen from './src/screens/singles/EventSeen';
-import EditProfile from './src/screens/loggedStack/EditProfile';
+import EditProfile from './src/screens/singles/EditProfile';
 import PaymentSuccess from './src/screens/singles/PaymentSuccess';
 
 

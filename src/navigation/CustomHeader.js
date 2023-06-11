@@ -4,9 +4,7 @@ import { Colors } from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import useTicketStore from '../services/TicketStore';
-import { auth, db } from '../../firebase';
-import { query, collection, where, getDocs, limit } from 'firebase/firestore';
-import { deleteDoc } from 'firebase/firestore';
+import { sellTickets } from '../DAL/DAO_tickets';
 
 
 const CustomHeader = () => {
@@ -28,47 +26,13 @@ const CustomHeader = () => {
         },
         {
           text: 'Confirmer',
-          onPress: () => sellTickets(),
+          onPress: () => sellTickets(eventId, selectedCounts, setMenuVisible, navigation),
         },
       ],
       { cancelable: false }
     );
   };
 
-  const sellTickets = async () => {
-    try {
-      const ticketsRef = collection(db, 'tickets');
-      const userId = auth.currentUser?.uid;
-  
-      const selectedTickets = Object.entries(selectedCounts);
-  
-      for (let i = 0; i < selectedTickets.length; i++) {
-        const [category, count] = selectedTickets[i];
-  
-        const categoryQuery = query(
-          ticketsRef,
-          where('eventId', '==', eventId),
-          where('userId', '==', userId),
-          where('category', '==', category),
-          limit(count) // Limite le nombre de documents à supprimer à "count"
-        );
-  
-        const categorySnapshot = await getDocs(categoryQuery);
-  
-        categorySnapshot.forEach(async (doc) => {
-          await deleteDoc(doc.ref);
-        });
-      }
-  
-      setMenuVisible(false);
-      navigation.goBack();
-      Alert.alert('Succès', 'Vous pouvez rafraichir votre liste')
-      console.log('Les tickets ont été supprimés avec succès.');
-
-    } catch (error) {
-      console.error('Erreur lors de la suppression des tickets :', error);
-    }
-  };
   
 
   

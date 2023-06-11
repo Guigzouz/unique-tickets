@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { addTicketToFirebase } from '../DAL/DAO_tickets';
 
 
 
 import { globalStyles } from '../styles/global';
 import { Colors } from '../styles/colors';
 
-const PaymentForm = ({ addTicketToFirebase, userId, eventId, navigation, docSnap, formatDate, ticketCounts, ticketCategories, isOpenClosing}) => {
+const PaymentForm = ({ userId, eventId, navigation, docSnap, ticketCounts, ticketCategories, addTicketToFirebase}) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -22,7 +23,7 @@ const PaymentForm = ({ addTicketToFirebase, userId, eventId, navigation, docSnap
     } else {
       // Logique de traitement du formulaire de paiement
       console.log('Carte bleue soumise : ', { cardNumber, expiryDate, cvv, name });
-      addTicketToFirebase(userId, eventId);
+      addTicketToFirebase({ userId, eventId, ticketCategories, ticketCounts });
       navigation.navigate("Fil d'actu")
       Alert.alert(
         'Succès',
@@ -44,7 +45,7 @@ const PaymentForm = ({ addTicketToFirebase, userId, eventId, navigation, docSnap
     }
   };
 
-  console.log("DocSnap in PAYMENTFORM.js",docSnap.data())
+  // console.log("DocSnap in PAYMENTFORM.js",docSnap.data())
 
   return (
     <View style={paymentStyles.container}>

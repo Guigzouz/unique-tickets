@@ -7,6 +7,7 @@ import PaymentForm from "./PaymentForm";
 import { auth } from "../../firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { addTicketToFirebase } from "../DAL/DAO_tickets";
 import { db } from "../../firebase";
 
 
@@ -17,32 +18,6 @@ const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategor
       (category) => ticketCounts[category.categoryName] > 0
     );
     
-  // Ajouter le ticket à la collection "tickets"
-  const addTicketToFirebase = async (userId, eventId) => {
-    try {
-      
-      for (const category in ticketCounts) {
-        const count = ticketCounts[category];
-        const categoryObj = ticketCategories.find((cat) => cat.categoryName === category);
-        if (categoryObj && count > 0) {
-          for (let i = 0; i < count; i++) {
-            const ticket = {
-              userId,
-              eventId,
-              category: categoryObj.categoryName,
-              price: categoryObj.price,
-            };
-            await db.collection('tickets').add(ticket);
-          }
-        }
-      }
-      
-      console.log('Tickets ajoutés avec succès !');
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout des tickets :', error);
-    }
-  };
-
     const calculateTotal = (ticketCounts, ticketCategories) => {
       let total = 0;
       for (const category in ticketCounts) {
@@ -56,7 +31,7 @@ const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategor
     };
 
     const total = calculateTotal(ticketCounts, ticketCategories);
-
+    console.log("ticketCounts value dans bottomsheet : ", ticketCounts)
 
   return (
     <BottomSheetScrollView>
@@ -104,7 +79,7 @@ const BottomSheetComponent = ({ docSnap, formatDate, ticketCounts, ticketCategor
       navigation={navigation}
       docSnap={docSnap}
       formatDate={formatDate} 
-      ticketcounts={ticketCounts}
+      ticketCounts={ticketCounts}
       ticketCategories={ticketCategories}
       />
 

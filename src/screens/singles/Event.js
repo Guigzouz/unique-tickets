@@ -141,7 +141,7 @@ const Event = ({ route, navigation }) => {
       <BottomSheet
         ref={sheetRef}
         snapPoints={snapPoints}
-        index={isOpen ? 0 : -1} // Utilisez la valeur d'isOpen pour contrôler l'état d'ouverture
+        index={isOpen ? 0 : -1} // Utilisation de la valeur d'isOpen pour contrôler l'état d'ouverture
         enablePanDownToClose={true}
         onClose={() => setIsOpen(false)}
         cursorHandle={singleStyles.cursorHandle}

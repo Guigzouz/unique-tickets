@@ -24,15 +24,7 @@ import useAuthStore from '../../services/AuthStore';
 
   const handleLogin = async () => { 
     login(email, password);
-    // try {
-    //await signInWithEmailAndPassword(auth, email, password).then(userCredentials =>{
-    //  const user = userCredentials.user
-     // console.log('firebase logged in :', user.email)
 
-   // }).catch(error => setError(error.message))
-   // } catch (err) {
-   //  console.log(err.message)
-   // }
   }
 
   
