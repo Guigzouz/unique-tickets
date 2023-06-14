@@ -118,21 +118,24 @@ const EventSeen = ({ route }) => {
 
         <ScrollView style={singleStyles.tickets}>
           {Object.keys(ticketCounts).map((category) => (
-            <TouchableOpacity key={category} style={singleStyles.ticketCategory} onPress={() => handleTicketSelection(category)}>
+            <View key={category} style={singleStyles.ticketCategory} >
               <View style={singleStyles.ticketCategoryColLeft}>
                 <Text style={singleStyles.ticketTextBold}>{category} x{ticketCounts[category]}</Text>
                 <Text style={singleStyles.ticketText}>prix catégorie €</Text>
               </View>
               <View style={singleStyles.ticketCategoryColRight}>
                 <Text style={singleStyles.ticketTextBold}>Quantité</Text>
-                <TouchableOpacity style={singleStyles.quantityContainer} onPress={() => handleTicketDeselection(category)}>
+                <View style={singleStyles.quantityContainer} >
                   <View style={singleStyles.quantityButton}>
-                    <Icon name="minus" size={14} color={Colors.primaryLight} />
+                    <Icon name="minus" size={16} color={Colors.primaryLight} onPress={() => handleTicketDeselection(category)}/>
                   </View>
                   <Text style={singleStyles.quantityText}>{selectedCounts[category] || 0}</Text>
-                </TouchableOpacity>
+                  <View style={singleStyles.quantityButton}>
+                    <Icon name="plus" size={16} color={Colors.primaryLight} onPress={() => handleTicketSelection(category)}/>
+                  </View>
+                </View>
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
 

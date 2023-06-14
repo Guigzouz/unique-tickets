@@ -46,9 +46,9 @@ export async function fetchEvents(searchPhrase = '') {
   
       if (searchPhrase !== '') {
         const options = {
-          keys: ['title', 'artist', 'salle'], // Specify the fields to search in
-          includeScore: true, // Include score for each result
-          threshold: 0.4, // Adjust the threshold for fuzzy matching
+          keys: ['title', 'artist', 'salle'], // Champs dans lesquels on cherche
+          includeScore: true, 
+          threshold: 0.4, // intesité de la correction d'erreur
         };
   
         const eventsSnapshot = await query.get();
@@ -60,12 +60,12 @@ export async function fetchEvents(searchPhrase = '') {
         const fuse = new Fuse(events, options);
         const searchResults = fuse.search(searchPhrase);
   
-        // Extract the matched items from the search results
+        // Extrait les items qui matchent
         const data = searchResults.map((result) => result.item);
   
         return data;
       } else {
-        // No search phrase provided, fetch all events
+        // pas de phrase entrée = fetch tout les events
         const querySnapshot = await query.get();
         const data = querySnapshot.docs.map((doc) => ({
           id: doc.id,

@@ -97,12 +97,7 @@ const Event = ({ route, navigation }) => {
           {/* Boucle qui va afficher toutes les catégories de l'event */}
           {ticketCategories.map((category, index) => (
 
-            <TouchableOpacity key={index} style={singleStyles.ticketCategory} 
-              onPress={() => {
-              const updatedCounts = { ...ticketCounts };
-              updatedCounts[category.categoryName] = (updatedCounts[category.categoryName] || 0) + 1;
-              setTicketCounts(updatedCounts);
-            }}>
+            <View key={index} style={singleStyles.ticketCategory}>
               
               <View style={singleStyles.ticketCategoryColLeft}>
                 <Text style={singleStyles.ticketTextBold}>{category.categoryName}</Text>
@@ -110,21 +105,31 @@ const Event = ({ route, navigation }) => {
               </View>
               <View style={singleStyles.ticketCategoryColRight}>
                 <Text style={singleStyles.ticketTextBold}>Quantité</Text>
-                <TouchableOpacity style={singleStyles.quantityContainer}
-                      onPress={() => {
+                <View style={singleStyles.quantityContainer}>
+                  <View style={singleStyles.quantityButton}>
+                    <Icon name="minus" size={16} color={Colors.primaryLight}
+                    onPress={() => {
                       const updatedCounts = { ...ticketCounts };
                       if (updatedCounts[category.categoryName] > 0) {
                         updatedCounts[category.categoryName] -= 1;
                         setTicketCounts(updatedCounts);
                       }
-                    }}>
-                  <View style={singleStyles.quantityButton}>
-                    <Icon name="minus" size={14} color={Colors.primaryLight} />
+                    }}
+                    />
                   </View>
                   <Text style={singleStyles.quantityText}>{ticketCounts[category.categoryName] || 0}</Text>
-                </TouchableOpacity>
+                  <View style={singleStyles.quantityButton}>
+                  <Icon name="plus" size={16} color={Colors.primaryLight}
+                    onPress={() => {
+                      const updatedCounts = { ...ticketCounts };
+                      updatedCounts[category.categoryName] = (updatedCounts[category.categoryName] || 0) + 1;
+                      setTicketCounts(updatedCounts);
+                    }}
+                    />
+                  </View>
+                </View>
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
 
@@ -247,9 +252,14 @@ const singleStyles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 8,
     paddingVertical: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
   },
   quantityButton: {
-    padding: 5
+    padding: 5,
+
   },
   quantityText: {
     fontSize: 16,
